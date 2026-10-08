@@ -51,6 +51,7 @@ They replace the dog and frog in the hero banner and on the 3D stage. Transparen
 | `MEGA_WINNERS` | `3` | minimum winners on a mega spin (a higher vote still wins) |
 | `BOOST_PER_HOUR` | `0.1` | diamond hands: slice grows +10% per hour held |
 | `BOOST_MAX` | `2` | ...up to 2× (set `1` to turn the boost off) |
+| `COOLDOWN_SPINS` | `5` | a winner sits out the next 5 spins (taken off the wheel), `0` = off |
 | `SITE_URL` | – | your site link, used in winner posts |
 
 ## Winner announcements (optional)
@@ -61,3 +62,7 @@ They replace the dog and frog in the hero banner and on the 3D stage. Transparen
 ## Cost note
 The live features (viewer count, emotes, votes) run Netlify functions. Responses are cached so many visitors stay cheap,
 but every open tab sends a small "I'm here" ping once a minute. With hundreds of visitors around the clock you may need a paid Netlify plan.
+
+## Terms screen, music, settings
+- First-time visitors see a "Read me first" screen with the terms and must tick 18+ and "I agree" before entering. It's a basic template, not legal advice: have a lawyer look at it if the project grows. If you change the terms, change `TERMS_KEY` (`wof_terms_v1` → `wof_terms_v2`) in index.html so everyone has to agree again.
+- Arcade music: 4 original chiptune tracks generated in the browser (no music files). Visitors pick a track, volume or turn it off in ⚙️ Settings.

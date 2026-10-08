@@ -490,6 +490,119 @@
   #youwin.show { display: grid; animation: fade .3s; }
   #youwin .b { font: clamp(48px, 12vw, 130px)/1 var(--display); color: var(--green); text-shadow: 0 0 30px var(--green), 0 0 80px var(--gold), 6px 6px 0 #0b5e33; animation: cdpop .8s ease-out, pulse .4s .8s infinite alternate; }
   #youwin .s { font: clamp(22px, 5vw, 44px) var(--display); color: var(--gold2); margin-top: 10px; }
+
+  /* ======================= v6: design polish ======================= */
+  [hidden] { display: none !important; }
+  /* film grain + vignette for a richer, less flat background */
+  body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .07; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(0,0,0,.55)); }
+
+  /* cards: deeper glass, gold hairline gradient border, accent title bar */
+  .card { position: relative; background: linear-gradient(180deg, rgba(36,13,62,.86), rgba(15,5,27,.92)); border: 1px solid transparent;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 24px 60px rgba(0,0,0,.5); }
+  .card::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
+    background: linear-gradient(140deg, rgba(255,214,102,.55), rgba(255,43,214,.18) 35%, rgba(41,231,255,.12) 70%, rgba(255,214,102,.35));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+  .card h2 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 15px; letter-spacing: .08em; padding-left: 12px; position: relative; }
+  .card h2::before { content: ""; position: absolute; left: 0; top: 2px; bottom: 2px; width: 4px; border-radius: 4px; background: linear-gradient(var(--gold), var(--pink)); box-shadow: 0 0 10px rgba(255,204,51,.6); }
+  .list h2 { padding-left: 30px; } .list h2::before { left: 18px; }
+
+  /* numbered section headers */
+  .sect { display: flex; align-items: center; gap: 12px; margin: 38px 0 16px; font: 13px var(--display); letter-spacing: .28em; color: var(--text); scroll-margin-top: 70px; }
+  .sect span { font: 11px var(--mono); letter-spacing: .1em; color: #0b0418; background: var(--gold); padding: 3px 8px; border-radius: 6px; box-shadow: 0 0 14px rgba(255,204,51,.5); }
+  .sect i { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(255,204,51,.6), transparent); }
+  #s-wheel { margin-top: 6px; } #s-vote { scroll-margin-top: 80px; }
+
+  /* sticky quick bar */
+  #topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 30; display: flex; align-items: center; gap: 14px; padding: 8px 16px;
+    background: rgba(10,3,20,.86); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,204,51,.25);
+    transform: translateY(-110%); transition: transform .3s ease; }
+  #topbar.show { transform: none; }
+  .tb-logo { font: 18px var(--display); text-decoration: none; color: var(--gold2); text-shadow: 0 0 10px var(--pink); white-space: nowrap; }
+  .tb-logo em { font-style: normal; color: var(--green); }
+  .tb-stat { display: flex; flex-direction: column; line-height: 1.1; }
+  .tb-stat span { font: 9px var(--mono); letter-spacing: .15em; color: var(--muted); }
+  .tb-stat b { font: 16px var(--display); font-weight: 400; color: var(--gold2); font-variant-numeric: tabular-nums; }
+  .tb-links { display: flex; gap: 4px; margin-left: auto; }
+  .tb-links a { font: 11px var(--display); letter-spacing: .08em; color: var(--muted); text-decoration: none; padding: 7px 10px; border-radius: 8px; }
+  .tb-links a:hover { color: var(--text); background: rgba(255,255,255,.06); }
+  .tb-btn { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: rgba(0,0,0,.35); font-size: 17px; flex: none; }
+  .tb-btn.on { border-color: var(--green); box-shadow: 0 0 12px rgba(57,255,136,.4); }
+  @media (max-width: 960px) { .tb-links { display: none; } .tb-stat:first-of-type { margin-left: auto; } }
+  @media (max-width: 520px) { .tb-logo { font-size: 13px; } #topbar { gap: 10px; padding: 7px 10px; } .tb-stat b { font-size: 14px; } }
+  .chip.btn.on { border-color: var(--green); color: var(--green); }
+
+  /* footer */
+  footer { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 24px; text-align: left; margin-top: 50px; padding: 28px 22px; border-top: 1px solid rgba(255,204,51,.25);
+    background: linear-gradient(180deg, rgba(255,204,51,.05), transparent); border-radius: 20px 20px 0 0; }
+  .f-logo { font: 22px var(--display); color: var(--gold2); text-shadow: 0 0 10px var(--pink); } .f-logo em { font-style: normal; color: var(--green); }
+  .f-brand p { margin-top: 8px; color: var(--muted); font-size: 13px; }
+  .f-links { display: flex; flex-direction: column; gap: 6px; } .f-links b { font: 11px var(--display); letter-spacing: .15em; color: var(--text); margin-bottom: 4px; }
+  .f-links a { color: var(--muted); text-decoration: none; font-size: 13px; cursor: pointer; } .f-links a:hover { color: var(--gold); }
+  .f-legal { grid-column: 1 / -1; font: 11px/1.6 var(--mono); color: #7d7196; border-top: 1px solid var(--line); padding-top: 14px; }
+  @media (max-width: 700px) { footer { grid-template-columns: 1fr 1fr; } .f-brand { grid-column: 1 / -1; } }
+
+  /* cooldown list */
+  .cooling { padding: 0 18px 14px; }
+  .cooling h4 { font: 12px var(--display); letter-spacing: .12em; color: var(--cyan); margin: 14px 0 8px; }
+  .cooling .cl { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cooling .cl span { font: 12px var(--mono); padding: 5px 9px; border-radius: 99px; background: rgba(41,231,255,.08); border: 1px solid rgba(41,231,255,.3); }
+  .cooling .cl span b { color: var(--cyan); margin-left: 4px; }
+
+  /* terms / read me (first visit) */
+  #terms { position: fixed; inset: 0; z-index: 120; display: none; place-items: center; padding: 16px; overflow-y: auto;
+    background: radial-gradient(80% 70% at 50% 20%, rgba(139,92,255,.35), transparent), rgba(5,1,12,.94); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  #terms.show { display: grid; }
+  .t-box { position: relative; width: min(640px, 100%); margin: auto; border-radius: 26px; padding: 28px 24px 22px; text-align: center;
+    background: linear-gradient(180deg, #1f0a36, #12041f); border: 2px solid var(--gold); box-shadow: 0 0 80px rgba(255,204,51,.25), 0 30px 80px rgba(0,0,0,.6); }
+  .t-m { position: absolute; width: 96px; top: -54px; right: 18px; animation: bob 3s ease-in-out infinite; }
+  .t-kick { font: 12px var(--display); letter-spacing: .3em; color: var(--green); }
+  .t-box h2 { font: clamp(22px, 5vw, 32px)/1.1 var(--display); margin: 8px 0 16px; color: #fff; text-shadow: 0 0 14px rgba(255,43,214,.5); }
+  .t-box h2 em { font-style: normal; color: var(--gold2); }
+  .t-how { display: grid; gap: 8px; text-align: left; margin-bottom: 14px; }
+  .t-how div { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: #ddd2f4; }
+  .t-how b { flex: none; width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; font: 13px var(--display); color: #0b0418; background: var(--gold); }
+  .t-terms { text-align: left; max-height: 34vh; overflow-y: auto; padding: 14px 16px; border-radius: 14px; background: rgba(0,0,0,.4); border: 1px solid var(--line);
+    font-size: 13px; line-height: 1.55; color: #cfc4e6; overscroll-behavior: contain; }
+  .t-terms h3 { font: 13px var(--display); letter-spacing: .12em; color: var(--gold); margin-bottom: 8px; }
+  .t-terms p { margin-bottom: 9px; } .t-terms b { color: #fff; }
+  .t-chk { display: flex; gap: 10px; align-items: flex-start; text-align: left; margin-top: 10px; font-size: 14px; cursor: pointer; }
+  .t-chk input { width: 20px; height: 20px; accent-color: var(--green); flex: none; margin-top: 1px; }
+  .t-chk.music { color: var(--muted); font-size: 13px; }
+  .t-go { margin-top: 16px; width: 100%; border: 0; border-radius: 14px; padding: 16px; font: 18px var(--display); letter-spacing: .08em; color: #07170d;
+    background: linear-gradient(180deg, #b6ffd3, var(--green) 50%, #13a04d); box-shadow: 0 5px 0 #0b6b33, 0 0 26px rgba(57,255,136,.5); }
+  .t-go:disabled { filter: grayscale(1) brightness(.6); box-shadow: none; cursor: not-allowed; }
+  body.terms-open { overflow: hidden; }
+
+  /* settings drawer */
+  #settings { position: fixed; top: 0; right: 0; bottom: 0; z-index: 110; width: min(360px, 92vw); padding: 18px; overflow-y: auto;
+    background: linear-gradient(180deg, #1c0832, #0e0319); border-left: 2px solid var(--gold); box-shadow: -20px 0 60px rgba(0,0,0,.6);
+    transform: translateX(105%); transition: transform .3s ease; visibility: hidden; }
+  #settings.show { transform: none; visibility: visible; }
+  .s-head { display: flex; justify-content: space-between; align-items: center; font: 16px var(--display); letter-spacing: .1em; margin-bottom: 10px; }
+  .s-head button { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: rgba(0,0,0,.4); }
+  .s-sec { padding: 14px 0; border-top: 1px solid var(--line); display: grid; gap: 10px; }
+  .s-lab { font: 12px var(--display); letter-spacing: .14em; color: var(--gold); }
+  .sw { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; }
+  .sw input { display: none; }
+  .sw i { flex: none; width: 42px; height: 24px; border-radius: 99px; background: #3a2a52; position: relative; transition: background .2s; }
+  .sw i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform .2s; }
+  .sw input:checked + i { background: var(--green); } .sw input:checked + i::after { transform: translateX(18px); }
+  .tracks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .trk { text-align: left; border-radius: 12px; padding: 10px; border: 1px solid var(--line); background: rgba(0,0,0,.35); }
+  .trk b { display: block; font: 12px var(--display); letter-spacing: .05em; } .trk span { font: 10px var(--mono); color: var(--muted); }
+  .trk.on { border-color: var(--green); background: rgba(57,255,136,.1); box-shadow: 0 0 14px rgba(57,255,136,.25); }
+  .trk.on b::after { content: " ♪"; color: var(--green); }
+  .vol { display: flex; align-items: center; gap: 10px; font: 11px var(--mono); color: var(--muted); }
+  .vol input { flex: 1; accent-color: var(--gold); } .vol b { width: 28px; text-align: right; color: var(--text); }
+  .s-btn { border: 1px solid var(--line); background: rgba(0,0,0,.35); border-radius: 12px; padding: 11px; font: 13px var(--display); letter-spacing: .05em; text-align: left; }
+  .scrim { position: fixed; inset: 0; z-index: 105; background: rgba(0,0,0,.5); display: none; } .scrim.show { display: block; }
+
+  /* reduce motion option */
+  body.calm .bg .floor, body.calm .hb-m, body.calm .cabinet .marquee, body.calm .logo::before { animation: none !important; }
+  body.calm #bg3d { display: none; }
+  body.no-emotes #floats { display: none; }
   /* ---------- 3D intro ---------- */
   #intro { position: fixed; inset: 0; z-index: 100; background: #07020f; display: none; transition: opacity .9s ease; }
   #intro.show { display: block; }
@@ -633,15 +746,23 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
 
 <div class="tape"><div class="tape-inner" id="tape"></div></div>
 
-<div class="wrap">
+<nav id="topbar" aria-label="Quick bar">
+  <a class="tb-logo" href="#top">WHEEL OF <em>FEE</em></a>
+  <div class="tb-stat"><span>JACKPOT</span><b id="tbPot">–</b></div>
+  <div class="tb-stat"><span>NEXT SPIN</span><b id="tbTime">–</b></div>
+  <div class="tb-links"><a href="#s-wheel">WHEEL</a><a href="#s-vote">VOTE</a><a href="#s-games">GAMES</a><a href="#s-chart">CHART</a><a href="#s-degens">DEGENS</a></div>
+  <button class="tb-btn" id="tbMusic" title="Music">🎵</button><button class="tb-btn" id="tbSet" title="Settings">⚙️</button>
+</nav>
+<div class="wrap" id="top">
   <div class="banner" id="banner"></div>
   <header>
     <div class="logo"><h1>WHEEL OF <em>FEE</em></h1><div class="sub" id="sub">$WHEEL · 50% creator fees · every 5 min</div></div>
     <div class="chips">
       <span class="chip live" id="viewers" title="People on this page right now"><i class="dotlive"></i><b id="viewN">–</b> watching</span>
       <button class="chip btn" id="alertBtn" title="Alerts: 1 min before the spin, and when your wallet is on the wheel">🔕 ALERTS</button>
-      <button class="chip btn" id="soundBtn" title="Sound on/off">🔇 SOUND</button>
-      <button class="chip btn" id="introBtn" title="Replay the intro">🎬 INTRO</button>
+      <button class="chip btn" id="musicBtn" title="Arcade music on/off">🎵 <span id="musicName">MUSIC</span></button>
+      <button class="chip btn" id="setBtn" title="Settings">⚙️</button>
+      <button class="chip btn" id="soundBtn" hidden>🔇 SOUND</button><button class="chip btn" id="introBtn" hidden>🎬 INTRO</button>
     </div>
   </header>
 
@@ -669,6 +790,7 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
     <div class="sx"><div class="k">SPINS</div><div class="v" id="sSpins">0</div></div>
   </section>
 
+  <div class="sect" id="s-wheel"><span>01</span>THE WHEEL<i></i></div>
   <section class="hero">
     <div class="cabinet">
       <div class="sticker" style="--r:-12deg;--b:var(--green);top:-12px;left:-10px">WAGMI</div>
@@ -709,7 +831,7 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
         <div class="row"><span id="nextAt">–</span><span>no claiming needed</span></div>
         <div class="mega" id="megaBadge"></div>
       </div>
-      <div class="card vote">
+      <div class="card vote" id="s-vote">
         <h2>🗳 VOTE: HOW MANY WINNERS? <small id="voteTotal"></small></h2>
         <div class="vopts" id="voteOpts"></div>
         <div class="vnote" id="voteNote">No votes = 1 winner. The pot is split equally between the winners.</div>
@@ -731,6 +853,7 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
     </div>
   </section>
 
+  <div class="sect" id="s-games"><span>02</span>PLAY WHILE YOU WAIT<i></i></div>
   <section class="games">
     <div class="card predict">
       <h2>🔮 CALL IT: WHICH BAG SIZE WINS NEXT? <small>free · +100 pts</small></h2>
@@ -746,11 +869,13 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
     </div>
   </section>
 
+  <div class="sect" id="s-chart"><span>03</span>THE CHART<i></i></div>
   <section class="card chartcard">
     <h2>📈 LIVE CHART <small id="chartSrc">via DexScreener</small></h2>
     <div class="chartwrap" id="chartWrap"><div class="chart-empty" id="chartEmpty">Loading chart…</div></div>
   </section>
 
+  <div class="sect" id="s-degens"><span>04</span>THE DEGENS<i></i></div>
   <section class="lower">
     <div class="card list">
       <h2>THE DEGENS ON THE WHEEL <small id="listCount"></small></h2>
@@ -761,6 +886,7 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
         </table>
         <div class="empty" id="empty" style="display:none">Nobody on the wheel yet. Be the first degen. 🎰</div>
       </div>
+      <div class="cooling" id="cooling"></div>
     </div>
     <div class="side">
       <div id="chatDock"></div>
@@ -776,7 +902,12 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
       </div>
     </div>
   </section>
-  <footer>Pot wallet: <a id="potLink" target="_blank" rel="noopener">–</a> · Memecoins are extremely risky. Only play with what you can lose. Not financial advice.</footer>
+  <footer>
+    <div class="f-brand"><div class="f-logo">WHEEL OF <em>FEE</em></div><p>Hold the coin, get on the wheel, win the creator fees. Paid automatically on Solana.</p></div>
+    <div class="f-links"><b>THE WHEEL</b><a href="#s-wheel">Spin</a><a href="#s-vote">Vote</a><a href="#s-games">Games</a><a href="#s-chart">Chart</a></div>
+    <div class="f-links"><b>INFO</b><a href="#" id="fTerms">Terms &amp; read me</a><a href="#" id="fSet">Settings</a><a id="potLink" target="_blank" rel="noopener">Pot wallet</a><a href="/api/debug" target="_blank" rel="noopener">Status</a></div>
+    <p class="f-legal">Entertainment only. Not financial advice. Memecoins are extremely risky: only play with what you can afford to lose. 18+. Not available where prohibited. Rewards are paid by automated software and are not guaranteed.</p>
+  </footer>
 </div>
 
 <div class="modal" id="winModal">
@@ -815,6 +946,53 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
     <div class="rules">anon · max 200 chars · no links · 1 msg / 4s</div>
   </div>
 </div>
+<div id="terms" role="dialog" aria-modal="true" aria-labelledby="termsTitle">
+  <div class="t-box">
+    <img class="t-m" data-m="frog" alt="">
+    <div class="t-kick">READ ME FIRST</div>
+    <h2 id="termsTitle">WELCOME TO THE WHEEL OF <em>FEE</em></h2>
+    <div class="t-how">
+      <div><b>1</b><span>Hold <span class="tMin">250,000</span>+ tokens for a few minutes and your wallet lands on the wheel.</span></div>
+      <div><b>2</b><span>Every few minutes the wheel spins. Winners get the creator fees, paid automatically.</span></div>
+      <div><b>3</b><span>Winners sit out a few spins so more people win. Vote for more winners per spin.</span></div>
+    </div>
+    <div class="t-terms" tabindex="0">
+      <h3>Terms of use</h3>
+      <p><b>1. Who can play.</b> You must be 18 or older (or the age of majority where you live) and taking part must be legal in your country. This site is not available where prohibited. You are responsible for checking and following your local laws.</p>
+      <p><b>2. Entertainment only.</b> Nothing here is financial, investment, legal or tax advice. There is no promise of profit. Memecoins are extremely volatile and can go to zero. Only use money you can afford to lose.</p>
+      <p><b>3. No guaranteed rewards.</b> Rewards come from creator fees and are paid by automated software. Payouts can be delayed, smaller than expected, fail or stop at any time (for example because of bugs, network or RPC outages, changes at pump.fun or Solana, or attacks). Being on the wheel does not entitle you to anything.</p>
+      <p><b>4. Provided "as is".</b> The site, the software and the token are provided "as is" and "as available", without warranties of any kind. To the maximum extent allowed by law, the creators and operators are not liable for any loss or damage, including lost funds, missed rewards, price changes, bugs, hacks or failures of third-party services (Solana, pump.fun, wallets, hosting).</p>
+      <p><b>5. Rules can change.</b> Minimum hold, cooldowns, number of winners, boosts and other rules may change or end at any time without notice.</p>
+      <p><b>6. Your responsibility.</b> You are responsible for your wallet, your keys and any taxes on what you receive. We will never ask for your seed phrase or private key and will never DM you first.</p>
+      <p><b>7. Chat and content.</b> Chat messages are anonymous user content, not statements from the team. Links are blocked for your safety. Don't trust anyone offering "support" or "airdrops".</p>
+    </div>
+    <label class="t-chk"><input type="checkbox" id="tAge"> I am 18+ and taking part is legal where I live.</label>
+    <label class="t-chk"><input type="checkbox" id="tAgree"> I have read and agree to the terms above.</label>
+    <label class="t-chk music"><input type="checkbox" id="tMusic" checked> 🎵 Play arcade music</label>
+    <button class="t-go" id="tGo" disabled>AGREE &amp; ENTER</button>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside id="settings" aria-label="Settings">
+  <div class="s-head"><b>⚙️ SETTINGS</b><button id="setX" aria-label="Close">✕</button></div>
+  <div class="s-sec"><div class="s-lab">🎵 ARCADE MUSIC</div>
+    <label class="sw"><input type="checkbox" id="optMusic"><i></i><span>Music</span></label>
+    <div class="tracks" id="tracks"></div>
+    <div class="vol"><span>VOL</span><input type="range" id="optVol" min="0" max="100" step="1"><b id="volV">35</b></div>
+  </div>
+  <div class="s-sec"><div class="s-lab">🔊 SOUND</div>
+    <label class="sw"><input type="checkbox" id="optSfx"><i></i><span>Sound effects (ticks, wins, countdown)</span></label>
+    <label class="sw"><input type="checkbox" id="optAlerts"><i></i><span>Alerts (1 min before spin, you're on the wheel)</span></label>
+  </div>
+  <div class="s-sec"><div class="s-lab">✨ VISUALS</div>
+    <label class="sw"><input type="checkbox" id="optMotion"><i></i><span>Reduce motion (lighter on old phones)</span></label>
+    <label class="sw"><input type="checkbox" id="optEmotes" checked><i></i><span>Show flying emotes</span></label>
+    <button class="s-btn" id="optIntro">🎬 Replay intro</button>
+  </div>
+  <div class="s-sec"><button class="s-btn" id="optTerms">📜 Terms &amp; read me</button></div>
+</aside>
+
 <div id="cd" aria-hidden="true"><div class="n" id="cdN">10</div><div class="t" id="cdT">GET READY</div><img class="cdm l" data-m="dog" alt=""><img class="cdm r" data-m="frog" alt=""></div>
 <div id="floats" aria-hidden="true"></div>
 <div id="youwin" aria-hidden="true"><div class="b">THAT'S YOU!!!</div><div class="s" id="youAmt"></div></div>
@@ -917,7 +1095,7 @@ function render() {
   $("pendCount").textContent = s.pendingCount;
   $("holdCount").textContent = s.holderCount ?? "–";
   $("listCount").textContent = `${s.eligible.length} wallet${s.eligible.length === 1 ? "" : "s"}`;
-  $("potLink").textContent = short(c.potWallet); $("potLink").href = solscan("account", c.potWallet);
+  $("potLink").textContent = "Pot wallet " + short(c.potWallet); $("potLink").href = solscan("account", c.potWallet);
   renderRows(); renderHistory(); renderCheck(); renderTape();
   if (typeof renderExtras === "function") renderExtras();
   if (displayKey === null) displayKey = s.lastRound?.id ?? Math.round(now() / (c.roundMinutes * 60000));
@@ -1258,6 +1436,7 @@ const demo = (() => {
   const cfg = { ticker: "FEE", mint: addr(), potWallet: addr(), minTokens: 250000, minHoldMinutes: 5, roundMinutes: RM / 60000, weighting: "equal", minPotSol: 0.01,
     voteOptions: [1, 3, 5, 10], megaEvery: 3, megaWinners: 3, boostPerHour: 0.1, boostMax: 2 };
   cfg.links = { pumpfun: "https://pump.fun/coin/" + cfg.mint, x: "https://x.com/", telegram: "", dexscreener: "https://dexscreener.com/solana/" + cfg.mint };
+  const cool = {};
   const oracles = [["moonboy", 700, 7, 9], ["ser_sol", 500, 5, 8], ["wagmi99", 300, 3, 6]].map(([name, pts, hits, calls], i) => ({ who: "d" + i, name, pts, hits, calls }));
   return {
     state() {
@@ -1266,13 +1445,14 @@ const demo = (() => {
       if (n - id * RM > 3000 && n - id * RM < RM / 5 && !rounds[id]) {
         const mega = id % cfg.megaEvery === 0, lead = typeof leadingVote === "function" ? leadingVote() : 1;
         const k = Math.min(holders.length, Math.max(lead, mega ? cfg.megaWinners : 1));
-        const entries = [...holders].sort((a, b) => a.owner < b.owner ? -1 : 1).map((h) => ({ ...h, weight: Math.round(boostOf(h) * 100) }));
+        const entries = holders.filter((h) => !(cool[h.owner] >= id)).sort((a, b) => a.owner < b.owner ? -1 : 1).map((h) => ({ ...h, weight: Math.round(boostOf(h) * 100) }));
         const idx = [...entries.keys()].sort(() => Math.random() - .5).slice(0, k);
         const share = pot / k;
         const winners = idx.map((i) => ({ owner: entries[i].owner, index: i, amountSol: share }));
         rounds[id] = { id, at: id * RM, status: "paid", winner: winners[0].owner, winnerIndex: idx[0], winners, winnersCount: k, mega, amountSol: pot, shareSol: share, entries, payoutSig: addr() + addr(),
           winningTiers: ["whale", "fish"].slice(0, 1 + (k > 1)) };
         hist.unshift(rounds[id]); stats.totalPaidSol += pot; stats.totalWinners += k; stats.rounds++;
+        winners.forEach((w) => { cool[w.owner] = id + 5; });
         winners.forEach((w) => { const x = (stats.wallets[w.owner] ??= { wins: 0, sol: 0 }); x.wins++; x.sol += w.amountSol; if (w.amountSol > stats.biggest.sol) stats.biggest = { owner: w.owner, sol: w.amountSol, round: id }; });
         vh.unshift({ round: id, chosen: lead, total: live?.vote?.total || 0, mega, winners: k });
         if (typeof demoLive === "object") demoLive.votes = {};
@@ -1280,7 +1460,9 @@ const demo = (() => {
       }
       const list = Object.entries(stats.wallets).map(([owner, v]) => ({ owner, ...v }));
       const nextId = Math.ceil(n / RM);
-      return { serverNow: n, config: cfg, eligible: [...holders].sort((a, b) => b.balance - a.balance), pendingCount: 3, holderCount: 211, potSol: pot, lastRound: hist[0], history: hist,
+      const cooling = holders.filter((h) => cool[h.owner] >= nextId);
+      return { serverNow: n, config: { ...cfg, cooldownSpins: 5 }, eligible: holders.filter((h) => !(cool[h.owner] >= nextId)).sort((a, b) => b.balance - a.balance), pendingCount: 3,
+        cooldown: cooling.map((h) => ({ owner: h.owner, balance: h.balance, spinsLeft: cool[h.owner] - nextId + 1 })), holderCount: 211, potSol: pot, lastRound: hist[0], history: hist,
         voteHistory: vh, oracles, lastPredictions: hist[0] ? { round: hist[0].id, winningTiers: hist[0].winningTiers, players: 14, hits: 5 } : null,
         next: { round: nextId, mega: nextId % cfg.megaEvery === 0, megaIn: (cfg.megaEvery - nextId % cfg.megaEvery) % cfg.megaEvery },
         stats: { ...stats, topSol: [...list].sort((a, b) => b.sol - a.sol).slice(0, 10), topWins: [...list].sort((a, b) => b.wins - a.wins).slice(0, 10) } };
@@ -1676,7 +1858,7 @@ function renderStats() {
   else mb.textContent = "";
 }
 function renderExtras() {
-  renderMine(); renderStats(); renderBoards(); renderVote(); renderPred();
+  renderMine(); renderStats(); renderBoards(); renderVote(); renderPred(); renderCooling();
   const st = myStatus();                                 // alert when your wallet lands on the wheel
   if (st && wasOn === false && st.on) notify("You're on the wheel! 🎰", `Your wallet made it onto the $${state.config.ticker} Wheel of Fee.`);
   if (st) wasOn = st.on;
@@ -1697,6 +1879,8 @@ function timerHook(left, roundMs) {
 }
 function frameHook(dt, t) {
   const stg = $("stage");
+  Music.setHype(mode === "shuffling" || mode === "waiting" || mode === "landing");
+  if ($("topbar").classList.contains("show")) { $("tbPot").textContent = "◎ " + potShown.toFixed(potShown < 1 ? 3 : 2); $("tbTime").textContent = $("hub").classList.contains("live") ? "SPIN!" : $("timer").textContent; }
   if (stageOpen) {
     const spinning = mode === "waiting" || mode === "landing" || mode === "shuffling";
     stg.classList.toggle("nervous", spinning);
@@ -1727,6 +1911,179 @@ function frameHook(dt, t) {
   const up = () => { if (down?.drag) { flickVel = Math.max(-14, Math.min(14, vel)); window.justFlicked = true; setTimeout(() => window.justFlicked = false, 300); } down = null; };
   box.addEventListener("pointerup", up); box.addEventListener("pointercancel", up);
 })();
+
+// ---------- arcade music: original chiptune tracks, generated live (no audio files) ----------
+const Music = (() => {
+  const TRACKS = {
+    rush:   { name: "JACKPOT RUSH", vibe: "fast · happy",   bpm: 144, key: 57, prog: [[0, "M"], [7, "M"], [9, "m"], [5, "M"]],  rhythm: "x.x.xx.x..x.x.x.",
+              k: "x...x...x...x...", s: "....x.......x...", h: "..x...x...x...x." },
+    neon:   { name: "NEON CASINO",  vibe: "groovy",         bpm: 118, key: 48, prog: [[0, "m"], [8, "M"], [3, "M"], [10, "M"]], rhythm: "x..x..x...x.x...",
+              k: "x.....x...x.....", s: "....x.......x...", h: "x.x.x.x.x.x.x.x." },
+    moon:   { name: "MOON MISSION", vibe: "hype · driving", bpm: 156, key: 52, prog: [[0, "m"], [0, "m"], [8, "M"], [10, "M"]], rhythm: "x.xxx.x.x.xxx.x.",
+              k: "x..x..x.x..x..x.", s: "....x.......x..x", h: "xxxxxxxxxxxxxxxx" },
+    lounge: { name: "8-BIT LOUNGE", vibe: "chill",          bpm: 92,  key: 53, prog: [[0, "M7"], [9, "m7"], [2, "m7"], [7, "7"]], rhythm: "x.....x...x.....",
+              k: "x.......x.......", s: "....x.......x...", h: "..x...x...x...x." },
+  };
+  const CH = { M: [0, 4, 7, 12], m: [0, 3, 7, 12], M7: [0, 4, 7, 11], m7: [0, 3, 7, 10], "7": [0, 4, 7, 10] };
+  const SCALE = { maj: [0, 2, 4, 5, 7, 9, 11], min: [0, 2, 3, 5, 7, 8, 10] };
+  let ctx = null, master = null, pulse = null, noise = null, timer = null, step = 0, nextT = 0, cur = null, lead = null, vol = 0.35, hype = false;
+  const hz = (m) => 440 * Math.pow(2, (m - 69) / 12);
+  const rng = (seed) => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+
+  // a 2×4-bar lead melody per track, written by a seeded "composer" so it's the same tune every time
+  function compose(tr) {
+    const r = rng([...tr.name].reduce((a, c) => a * 31 + c.charCodeAt(0), 7));
+    const sc = SCALE[tr.prog[0][1].startsWith("m") ? "min" : "maj"];
+    const notes = []; let prev = 7;
+    for (let v = 0; v < 2; v++) for (let bar = 0; bar < 4; bar++) {
+      const [root, q] = tr.prog[bar], tones = CH[q].map((x) => (x + root) % 12);
+      for (let i = 0; i < 16; i++) {
+        if (tr.rhythm[i] !== "x" || (v === 1 && bar === 3 && i > 10)) { notes.push(null); continue; }
+        let deg;
+        if (i === 0 || r() < 0.55) {                       // land on a chord tone near the last note
+          const opts = []; for (let o = 0; o < 2; o++) tones.forEach((t) => opts.push(t + o * 12));
+          deg = opts.sort((a, b) => Math.abs(a - prev) - Math.abs(b - prev))[Math.floor(r() * 2)];
+        } else {                                            // or step through the scale
+          const all = []; for (let o = 0; o < 2; o++) sc.forEach((t) => all.push(t + o * 12));
+          const k = all.indexOf(all.reduce((a, b) => Math.abs(b - prev) < Math.abs(a - prev) ? b : a)) + (r() < 0.5 ? 1 : -1);
+          deg = all[Math.max(0, Math.min(all.length - 1, k))];
+        }
+        if (v === 1 && bar === 3 && i === 10) deg = 12;   // phrase ends on the root
+        prev = deg; notes.push(deg);
+      }
+    }
+    return notes;
+  }
+  function init() {
+    if (ctx) return;
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -14; comp.ratio.value = 4;
+    master = ctx.createGain(); master.gain.value = vol * 0.55; master.connect(comp).connect(ctx.destination);
+    const N = 32, re = new Float32Array(N), im = new Float32Array(N);   // 25% pulse wave = classic chiptune lead
+    for (let n = 1; n < N; n++) im[n] = (2 / (n * Math.PI)) * Math.sin(n * Math.PI * 0.25);
+    pulse = ctx.createPeriodicWave(re, im);
+    noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate); const d = noise.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  }
+  function tone(t, f, dur, type, g, wave) {
+    const o = ctx.createOscillator(), a = ctx.createGain();
+    if (wave) o.setPeriodicWave(wave); else o.type = type;
+    o.frequency.setValueAtTime(f, t);
+    a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(g, t + 0.005); a.gain.exponentialRampToValueAtTime(0.0008, t + dur);
+    o.connect(a).connect(master); o.start(t); o.stop(t + dur + 0.02);
+  }
+  function hit(t, kind) {
+    if (kind === "k") { const o = ctx.createOscillator(), a = ctx.createGain(); o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.12);
+      a.gain.setValueAtTime(0.5, t); a.gain.exponentialRampToValueAtTime(0.001, t + 0.16); o.connect(a).connect(master); o.start(t); o.stop(t + 0.18); return; }
+    const s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), a = ctx.createGain(); s.buffer = noise;
+    f.type = kind === "h" ? "highpass" : "bandpass"; f.frequency.value = kind === "h" ? 7000 : 1800;
+    const dur = kind === "h" ? 0.04 : 0.13; a.gain.setValueAtTime(kind === "h" ? 0.12 : 0.28, t); a.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    s.connect(f).connect(a).connect(master); s.start(t, Math.random() * 0.5); s.stop(t + dur + 0.02);
+  }
+  function schedule() {
+    const tr = cur; if (!tr) return;
+    const spb = 60 / (tr.bpm * (hype ? 1.12 : 1)) / 4;
+    while (nextT < ctx.currentTime + 0.15) {
+      const i = step % 16, bar = Math.floor(step / 16) % 4, [root, q] = tr.prog[bar], key = tr.key;
+      const ln = lead[step % 128];
+      if (ln != null) tone(nextT, hz(key + 12 + ln), spb * 1.8, null, 0.07, pulse);
+      const tones = CH[q]; tone(nextT, hz(key + 12 + root + tones[i % 4]), spb * 0.9, "square", 0.022);   // arpeggio
+      if (i % 2 === 0) tone(nextT, hz(key - 12 + root + (i % 4 === 2 ? 12 : 0)), spb * 1.6, "triangle", 0.2);  // bass
+      if (tr.k[i] === "x") hit(nextT, "k");
+      if (tr.s[i] === "x") hit(nextT, "s");
+      if (tr.h[i] === "x" || hype) hit(nextT, "h");
+      nextT += spb; step++;
+    }
+  }
+  return {
+    TRACKS,
+    play(id) {
+      init(); ctx.resume?.();
+      cur = TRACKS[id] || TRACKS.rush; lead = compose(cur); step = 0; nextT = ctx.currentTime + 0.06;
+      clearInterval(timer); timer = setInterval(schedule, 25);
+    },
+    stop() { clearInterval(timer); timer = null; cur = null; },
+    setVolume(v) { vol = v; if (master) master.gain.setTargetAtTime(v * 0.55, ctx.currentTime, 0.05); },
+    setHype(on) { hype = !!on; },
+    pause() { ctx?.suspend?.(); }, resume() { if (cur) ctx?.resume?.(); },
+    get playing() { return !!timer; },
+  };
+})();
+
+// ---------- settings (saved per visitor) ----------
+const prefs = Object.assign({ music: true, track: "rush", vol: 35, sfx: true, calm: false, emotes: true }, LS.get("wof_prefs", {}));
+const savePrefs = () => LS.set("wof_prefs", prefs);
+function applyPrefs() {
+  soundOn = !!prefs.sfx; $("soundBtn").textContent = soundOn ? "🔊 SOUND" : "🔇 SOUND";
+  document.body.classList.toggle("calm", !!prefs.calm); document.body.classList.toggle("no-emotes", !prefs.emotes);
+  $("optMusic").checked = !!prefs.music; $("optSfx").checked = !!prefs.sfx; $("optAlerts").checked = !!alertsOn;
+  $("optMotion").checked = !!prefs.calm; $("optEmotes").checked = !!prefs.emotes;
+  $("optVol").value = prefs.vol; $("volV").textContent = prefs.vol;
+  const t = Music.TRACKS[prefs.track] || Music.TRACKS.rush;
+  $("musicName").textContent = prefs.music ? t.name : "MUSIC OFF";
+  [$("musicBtn"), $("tbMusic")].forEach((b) => b.classList.toggle("on", !!prefs.music));
+  setHTML("tracks", Object.entries(Music.TRACKS).map(([id, tr]) => `<button class="trk ${id === prefs.track ? "on" : ""}" data-trk="${id}"><b>${tr.name}</b><span>${tr.vibe} · ${tr.bpm} bpm</span></button>`).join(""));
+}
+function startMusic() { if (prefs.music && termsOk()) { Music.setVolume(prefs.vol / 100); Music.play(prefs.track); } }
+function toggleMusic(on) { prefs.music = on ?? !prefs.music; savePrefs(); applyPrefs(); prefs.music ? startMusic() : Music.stop(); }
+$("musicBtn").addEventListener("click", () => toggleMusic());
+$("tbMusic").addEventListener("click", () => toggleMusic());
+$("optMusic").addEventListener("change", (e) => toggleMusic(e.target.checked));
+$("tracks").addEventListener("click", (e) => { const b = e.target.closest("[data-trk]"); if (!b) return; prefs.track = b.dataset.trk; prefs.music = true; savePrefs(); applyPrefs(); startMusic(); });
+$("optVol").addEventListener("input", (e) => { prefs.vol = +e.target.value; $("volV").textContent = prefs.vol; Music.setVolume(prefs.vol / 100); savePrefs(); });
+$("optSfx").addEventListener("change", (e) => { prefs.sfx = e.target.checked; savePrefs(); applyPrefs(); if (prefs.sfx) beep(880, .08); });
+$("optAlerts").addEventListener("change", (e) => { if (e.target.checked !== alertsOn) $("alertBtn").click(); });
+$("optMotion").addEventListener("change", (e) => { prefs.calm = e.target.checked; savePrefs(); applyPrefs(); });
+$("optEmotes").addEventListener("change", (e) => { prefs.emotes = e.target.checked; savePrefs(); applyPrefs(); });
+$("optIntro").addEventListener("click", () => { closeSettings(); window.playIntro && window.playIntro(true); });
+$("optTerms").addEventListener("click", () => { closeSettings(); openTerms(); });
+const openSettings = () => { $("settings").classList.add("show"); $("scrim").classList.add("show"); };
+const closeSettings = () => { $("settings").classList.remove("show"); $("scrim").classList.remove("show"); };
+[$("setBtn"), $("tbSet")].forEach((b) => b.addEventListener("click", openSettings));
+$("setX").addEventListener("click", closeSettings); $("scrim").addEventListener("click", closeSettings);
+$("fSet").addEventListener("click", (e) => { e.preventDefault(); openSettings(); });
+$("fTerms").addEventListener("click", (e) => { e.preventDefault(); openTerms(); });
+document.addEventListener("visibilitychange", () => (document.hidden ? Music.pause() : Music.resume()));
+
+// ---------- terms / read me: must agree before entering ----------
+const TERMS_KEY = "wof_terms_v1";
+function termsOk() { return !!LS.get(TERMS_KEY, false); }
+const afterTermsQ = [];
+window.afterTerms = (fn) => (termsOk() ? fn() : afterTermsQ.push(fn));
+function openTerms() {
+  const ok = termsOk();
+  $("tAge").checked = ok; $("tAgree").checked = ok; $("tMusic").checked = !!prefs.music;
+  $("tGo").textContent = ok ? "CLOSE" : "AGREE & ENTER"; $("tGo").disabled = !ok;
+  if (state?.config) document.querySelectorAll(".tMin").forEach((x) => (x.textContent = fmt(state.config.minTokens)));
+  $("terms").classList.add("show"); document.body.classList.add("terms-open");
+}
+const syncGo = () => { $("tGo").disabled = !($("tAge").checked && $("tAgree").checked); };
+$("tAge").addEventListener("change", syncGo); $("tAgree").addEventListener("change", syncGo);
+$("tGo").addEventListener("click", () => {
+  if (!($("tAge").checked && $("tAgree").checked)) return;
+  const first = !termsOk();
+  LS.set(TERMS_KEY, { at: Date.now() });
+  prefs.music = $("tMusic").checked; savePrefs(); applyPrefs();
+  $("terms").classList.remove("show"); document.body.classList.remove("terms-open");
+  if (prefs.music && !Music.playing) startMusic();            // this click counts as the user gesture browsers need for audio
+  if (first) afterTermsQ.splice(0).forEach((fn) => fn());
+});
+applyPrefs();
+if (!termsOk()) openTerms(); else if (prefs.music) {
+  // returning visitor: browsers only allow audio after a tap, so start music on the first interaction
+  const kick = () => { startMusic(); removeEventListener("pointerdown", kick); removeEventListener("keydown", kick); };
+  addEventListener("pointerdown", kick); addEventListener("keydown", kick);
+}
+
+// ---------- sticky quick bar ----------
+addEventListener("scroll", () => $("topbar").classList.toggle("show", scrollY > 420), { passive: true });
+
+// ---------- cooldown (winners sit out a few spins) ----------
+function renderCooling() {
+  const cl = state?.cooldown || [], n = state?.config?.cooldownSpins;
+  setHTML("cooling", cl.length ? `<h4>🧊 COOLING DOWN · won recently, back after ${n} spins</h4><div class="cl">${cl.map((c) => `<span>${short(c.owner)}<b>${c.spinsLeft} spin${c.spinsLeft > 1 ? "s" : ""}</b></span>`).join("")}</div>` : "");
+  const mine = cl.find((c) => c.owner === myWallet());
+  if (mine) $("checkOut").innerHTML = `<b>🧊 You won recently, legend.</b> You're cooling down: back on the wheel in <b>${mine.spinsLeft} spin${mine.spinsLeft > 1 ? "s" : ""}</b>. Keep holding.`;
+}
 
 // ---------- anon chat ----------
 const chat = { el: $("chat"), open: false, seen: new Set(), last: 0, unread: 0, sending: false, myIds: new Set() };
@@ -2360,7 +2717,7 @@ function start() {
   running = { end };
 }
 
-if (!QS.has("nointro") && !reduced && (!seen() || QS.has("intro"))) start();
+if (!QS.has("nointro") && !reduced && (!seen() || QS.has("intro"))) (window.afterTerms || ((f) => f()))(() => start());
 </script>
 </body>
 </html>
