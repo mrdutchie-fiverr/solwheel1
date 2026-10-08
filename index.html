@@ -96,7 +96,8 @@
   .wheel-box::before { content: ""; position: absolute; inset: -6%; border-radius: 50%; z-index: 0;
     background: conic-gradient(from 0deg, var(--pink), var(--cyan), var(--green), var(--gold), var(--pink)); filter: blur(36px); opacity: .45;
     animation: spinglow 8s linear infinite; }
-  @keyframes spinglow { to { transform: rotate(360deg); } }
+  /* colour cycle instead of rotating: a rotating box changes the page width and makes phones zoom in/out */
+  @keyframes spinglow { to { filter: blur(36px) hue-rotate(360deg); } }
   canvas#wheel { position: relative; z-index: 1; width: 100%; height: 100%; display: block; }
   .pointer { position: absolute; top: -2.5%; left: 50%; z-index: 3; width: 13%; transform-origin: 50% 22%; transform: translateX(-50%) rotate(0deg);
     filter: drop-shadow(0 6px 10px rgba(0,0,0,.7)) drop-shadow(0 0 12px rgba(255,59,92,.6)); }
@@ -338,6 +339,16 @@
   #chat.docked { position: static; width: auto; max-width: none; z-index: auto; border-radius: 22px; }
   #chat.docked .ch { cursor: default; } #chat.docked #chatToggle { display: none; }
   #chat.docked .cb { height: 420px; }
+
+  /* never let anything make the page wider than the screen (phones zoom in/out when it does) */
+  html, body { overflow-x: hidden; max-width: 100%; }
+  @supports (overflow: clip) { html, body { overflow-x: clip; } }
+  .cabinet { overflow: hidden; }
+  .cabinet .sticker:nth-of-type(1) { top: 8px !important; left: 8px !important; }
+  .cabinet .sticker:nth-of-type(2) { top: 8px !important; right: 8px !important; }
+  .cabinet::before { top: 0; } .cabinet::after { bottom: 0; }
+  .tape { contain: paint; } .bg { contain: strict; }
+  @media (max-width: 700px) { .sticker { font-size: 10px; padding: 3px 7px; } .cabinet .marquee { font-size: 12px; margin-top: 26px; } }
   /* ---------- 3D intro ---------- */
   #intro { position: fixed; inset: 0; z-index: 100; background: #07020f; display: none; transition: opacity .9s ease; }
   #intro.show { display: block; }
