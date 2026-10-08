@@ -28,9 +28,16 @@ Optional: `TICKER`, `EXCLUDE_WALLETS` (comma separated), `DRY_RUN` (`true` = no 
 
 Links on the page (optional, must start with https://): `X_URL`, `TELEGRAM_URL`, `PUMPFUN_URL`
 (pump.fun and the chart link are filled in automatically from the CA).
+Live chart: found automatically on DexScreener from the CA. If it ever shows the wrong pair, set `CHART_PAIR`
+to the pair address from the DexScreener URL (dexscreener.com/solana/<PAIR_ADDRESS>).
 Chat moderation (optional): `CHAT_ADMIN_KEY` = any secret password. Then, from the browser console on the site:
 `fetch("/api/chat",{method:"POST",body:JSON.stringify({admin:"YOUR_KEY",clear:true})})` clears the chat;
 use `{admin:"YOUR_KEY",ban:"<anon id>"}` to mute someone (the id is the color code shown in /api/chat).
 After changing a setting: **Deploys → Trigger deploy**.
 
 Demo of the page without any backend: `/?demo` (or `/?demo&fast` for 30-second rounds).
+
+## Your own mascot images (optional)
+Upload your images to the repo next to index.html (e.g. `mascot-left.png`, `mascot-right.gif`), then in Netlify set
+`MASCOT_LEFT` = `mascot-left.png` and `MASCOT_RIGHT` = `mascot-right.gif` (or full https links) and redeploy.
+They replace the dog and frog in the hero banner and on the 3D stage. Transparent PNG/WebP looks best.

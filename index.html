@@ -352,6 +352,50 @@
   /* phones: chat bubble bottom-LEFT (Netlify's own badge sits bottom-right) */
   @media (max-width: 960px) { #chat:not(.docked).min { right: auto; left: 12px; bottom: 12px; } #chat:not(.docked):not(.min) { bottom: 12px; } }
   @media (max-width: 960px) { #chat.min #chatToggle { display: none; } }
+
+  /* ---------- hero banner with mascots ---------- */
+  .heroban { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: end; gap: 10px; margin: 0 0 18px; padding: 18px 18px 0;
+    border-radius: 26px 26px 0 0; overflow: hidden;
+    background: radial-gradient(70% 120% at 50% 100%, rgba(255,204,51,.22), transparent 70%), linear-gradient(180deg, rgba(139,92,255,.18), rgba(255,43,214,.08)); border-bottom: 3px solid var(--gold); }
+  .heroban::after { content: ""; position: absolute; inset: auto 0 0 0; height: 2px; background: linear-gradient(90deg, transparent, #fff6c8, transparent); }
+  .hb-m { width: clamp(84px, 15vw, 190px); height: auto; filter: drop-shadow(0 12px 18px rgba(0,0,0,.6)); animation: bob 3.2s ease-in-out infinite; transform-origin: 50% 100%; margin-bottom: -6px; }
+  .hb-m.r { animation-delay: -1.6s; }
+  @keyframes bob { 50% { transform: translateY(-8px) rotate(-3deg); } }
+  .hb-text { text-align: center; padding-bottom: 18px; }
+  .hb-text .kick { font: 13px var(--display); letter-spacing: .18em; color: var(--green); text-shadow: 0 0 12px rgba(57,255,136,.7); }
+  .hb-text .big { font: clamp(20px, 3.6vw, 44px)/1.05 var(--display); margin: 8px 0 12px; color: #fff;
+    text-shadow: 0 0 18px rgba(255,43,214,.6), 3px 3px 0 #6b0b5e; }
+  .hb-text .big em { font-style: normal; background: linear-gradient(180deg, #fff7c2, var(--gold) 55%, #c27b00); -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 14px rgba(255,204,51,.7)); }
+  .hb-text .tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .hb-text .tags span { font: 11px var(--mono); letter-spacing: .08em; padding: 6px 10px; border-radius: 99px; background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.12); }
+  @media (max-width: 700px) {
+    .heroban { padding: 12px 8px 0; gap: 4px; }
+    .hb-m { width: 72px; animation: none; }
+    .hb-text .kick { font-size: 9px; letter-spacing: .08em; } .hb-text .tags span { font-size: 9px; padding: 4px 7px; }
+  }
+  .hb-m.custom { object-fit: contain; max-height: 200px; }
+  .h2m { width: 26px; height: 26px; vertical-align: -6px; margin-left: 6px; }
+  .chm { width: 24px; height: 24px; vertical-align: -6px; }
+
+  /* ---------- live chart ---------- */
+  .chartcard { margin-top: 22px; padding: 16px; }
+  .chartwrap { position: relative; height: 460px; border-radius: 16px; overflow: hidden; background: #0b0418; border: 1px solid var(--line); }
+  .chartwrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .chart-empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: var(--muted); font: 13px var(--mono); padding: 20px; }
+  @media (max-width: 700px) { .chartwrap { height: 380px; } }
+
+  /* ---------- 3D wheel ---------- */
+  .wheel-box.w3d { width: 100%; aspect-ratio: 1.12; transform: none !important; }
+  .wheel-box.w3d canvas#wheel { position: absolute; width: 10px; height: 10px; opacity: 0; pointer-events: none; }
+  .wheel-box.w3d .pointer { display: none; }
+  .wheel-box.w3d::before { inset: 4% 14%; }
+  .wheel-box.w3d::after { display: none; }
+  #wheel3d { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 1; }
+  .wheel-box.w3d .hub { width: var(--hubw, 24%); left: var(--hubx, 50%); top: var(--huby, 50%); }
+  .wheel-box.w3d .hub .t { font-size: clamp(18px, calc(var(--hubpx, 160px) * .26), 52px); }
+  .wheel-box.w3d .hub.live .t { font-size: clamp(12px, calc(var(--hubpx, 160px) * .13), 26px); }
+  @media (max-width: 700px) { .chips3d, .dice { display: none; } }
   /* ---------- 3D intro ---------- */
   #intro { position: fixed; inset: 0; z-index: 100; background: #07020f; display: none; transition: opacity .9s ease; }
   #intro.show { display: block; }
@@ -385,6 +429,112 @@
 </style>
 </head>
 <body>
+<script>
+// Original Wheel of Fee mascots (vector art made for this site; not based on any existing meme character).
+// Used on the page and as 3D billboards next to the wheel.
+window.MASCOTS = {
+  // "Chip" — sunglasses shiba-style degen dog with a gold chain
+  dog: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260">
+  <defs>
+    <radialGradient id="df" cx=".45" cy=".4" r=".7"><stop offset="0" stop-color="#ffb35c"/><stop offset=".7" stop-color="#f08a24"/><stop offset="1" stop-color="#c25f0c"/></radialGradient>
+    <linearGradient id="dg" x1="0" x2="1"><stop offset="0" stop-color="#8a5600"/><stop offset=".5" stop-color="#fff0a6"/><stop offset="1" stop-color="#b07a00"/></linearGradient>
+    <linearGradient id="ds" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b2b3a"/><stop offset="1" stop-color="#05050a"/></linearGradient>
+  </defs>
+  <path d="M40 120 L52 22 L104 70 Z" fill="#c25f0c"/><path d="M52 38 L60 88 L92 72 Z" fill="#ffd9b0"/>
+  <path d="M200 120 L188 22 L136 70 Z" fill="#c25f0c"/><path d="M188 38 L180 88 L148 72 Z" fill="#ffd9b0"/>
+  <ellipse cx="120" cy="130" rx="92" ry="84" fill="url(#df)"/>
+  <path d="M42 150 Q60 205 120 212 Q180 205 198 150 Q170 172 120 170 Q70 172 42 150 Z" fill="#fff3e2"/>
+  <ellipse cx="120" cy="168" rx="46" ry="34" fill="#fff8ee"/>
+  <ellipse cx="120" cy="150" rx="15" ry="10" fill="#1a0d05"/><ellipse cx="115" cy="146" rx="5" ry="3" fill="#fff" opacity=".7"/>
+  <path d="M120 160 L120 172 M98 176 Q120 196 142 176" stroke="#1a0d05" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M112 182 Q120 200 128 182 Z" fill="#ff5c8a"/>
+  <path d="M34 104 Q34 88 52 88 L104 88 Q112 88 114 96 L126 96 Q128 88 136 88 L188 88 Q206 88 206 104 L200 126 Q196 140 180 140 L150 140 Q136 140 132 126 L128 108 L112 108 L108 126 Q104 140 90 140 L60 140 Q44 140 40 126 Z" fill="url(#ds)" stroke="#000" stroke-width="3"/>
+  <path d="M52 96 L76 96 L60 120 Z M150 96 L174 96 L158 120 Z" fill="#fff" opacity=".35"/>
+  <path d="M70 214 Q120 250 170 214" stroke="url(#dg)" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <circle cx="120" cy="236" r="18" fill="url(#dg)" stroke="#6b4400" stroke-width="3"/>
+  <text x="120" y="244" font-family="Impact,Arial Black,sans-serif" font-size="24" text-anchor="middle" fill="#5a3a00">$</text>
+</svg>`,
+
+  // "Fee King" — round frog king with a crown and a gold coin
+  frog: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260">
+  <defs>
+    <radialGradient id="fb" cx=".45" cy=".35" r=".75"><stop offset="0" stop-color="#b8ff6a"/><stop offset=".6" stop-color="#39d353"/><stop offset="1" stop-color="#16803a"/></radialGradient>
+    <linearGradient id="fc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3a6"/><stop offset=".5" stop-color="#ffcc33"/><stop offset="1" stop-color="#b07a00"/></linearGradient>
+  </defs>
+  <ellipse cx="120" cy="170" rx="100" ry="80" fill="url(#fb)"/>
+  <ellipse cx="120" cy="196" rx="62" ry="44" fill="#d9ffb0" opacity=".85"/>
+  <circle cx="72" cy="96" r="40" fill="url(#fb)"/><circle cx="168" cy="96" r="40" fill="url(#fb)"/>
+  <circle cx="72" cy="96" r="29" fill="#fff"/><circle cx="168" cy="96" r="29" fill="#fff"/>
+  <circle cx="78" cy="100" r="15" fill="#102018"/><circle cx="162" cy="100" r="15" fill="#102018"/>
+  <circle cx="83" cy="94" r="6" fill="#fff"/><circle cx="167" cy="94" r="6" fill="#fff"/>
+  <path d="M58 158 Q120 214 182 158" stroke="#0f4d22" stroke-width="7" fill="#7a1530" stroke-linecap="round"/>
+  <path d="M96 180 Q120 200 144 180 Q120 188 96 180 Z" fill="#ff6b9a"/>
+  <circle cx="60" cy="150" r="10" fill="#ff8fb1" opacity=".6"/><circle cx="180" cy="150" r="10" fill="#ff8fb1" opacity=".6"/>
+  <path d="M74 52 L84 14 L104 40 L120 6 L136 40 L156 14 L166 52 Z" fill="url(#fc)" stroke="#6b4400" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="120" cy="38" r="7" fill="#ff2bd6"/><circle cx="94" cy="44" r="5" fill="#29e7ff"/><circle cx="146" cy="44" r="5" fill="#29e7ff"/>
+  <circle cx="200" cy="214" r="30" fill="url(#fc)" stroke="#6b4400" stroke-width="4"/>
+  <circle cx="200" cy="214" r="21" fill="none" stroke="#8a5600" stroke-width="3"/>
+  <text x="200" y="224" font-family="Impact,Arial Black,sans-serif" font-size="26" text-anchor="middle" fill="#6b4400">&#9678;</text>
+  <ellipse cx="174" cy="232" rx="14" ry="10" fill="url(#fb)"/>
+</svg>`,
+
+  // "Lady Luck" — neon casino cat with a dealer visor
+  cat: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260">
+  <defs>
+    <radialGradient id="cb" cx=".45" cy=".4" r=".75"><stop offset="0" stop-color="#5a3a8a"/><stop offset=".7" stop-color="#2a1450"/><stop offset="1" stop-color="#140828"/></radialGradient>
+    <linearGradient id="cv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5dffb0"/><stop offset="1" stop-color="#0a8a4a"/></linearGradient>
+  </defs>
+  <path d="M38 132 L46 24 L108 78 Z" fill="#2a1450"/><path d="M52 44 L58 92 L94 78 Z" fill="#ff7ad9"/>
+  <path d="M202 132 L194 24 L132 78 Z" fill="#2a1450"/><path d="M188 44 L182 92 L146 78 Z" fill="#ff7ad9"/>
+  <ellipse cx="120" cy="146" rx="94" ry="86" fill="url(#cb)"/>
+  <path d="M40 96 Q120 52 200 96 L210 112 Q120 84 30 112 Z" fill="url(#cv)" opacity=".92"/>
+  <path d="M30 112 Q120 84 210 112" stroke="#03381c" stroke-width="4" fill="none"/>
+  <ellipse cx="84" cy="140" rx="24" ry="27" fill="#39ff88"/><ellipse cx="156" cy="140" rx="24" ry="27" fill="#39ff88"/>
+  <ellipse cx="84" cy="142" rx="7" ry="22" fill="#0a1a10"/><ellipse cx="156" cy="142" rx="7" ry="22" fill="#0a1a10"/>
+  <circle cx="92" cy="130" r="5" fill="#fff"/><circle cx="164" cy="130" r="5" fill="#fff"/>
+  <path d="M112 178 L128 178 L120 188 Z" fill="#ff7ad9"/>
+  <path d="M120 188 Q108 200 96 194 M120 188 Q132 200 144 194" stroke="#ff7ad9" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M54 176 L18 168 M54 186 L16 190 M186 176 L222 168 M186 186 L224 190" stroke="#c9b6ff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="34" cy="150" r="9" fill="none" stroke="#ffcc33" stroke-width="5"/>
+  <rect x="150" y="196" width="46" height="62" rx="6" fill="#fff" stroke="#111" stroke-width="3" transform="rotate(12 173 227)"/>
+  <text x="176" y="236" font-family="Georgia,serif" font-size="22" font-weight="bold" text-anchor="middle" fill="#e0123a" transform="rotate(12 173 227)">A&#9829;</text>
+</svg>`,
+
+  rocket: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 160">
+  <defs><linearGradient id="rk" x1="0" x2="1"><stop offset="0" stop-color="#cfd6ff"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#9aa6e0"/></linearGradient></defs>
+  <path d="M60 4 Q96 40 92 104 L28 104 Q24 40 60 4 Z" fill="url(#rk)" stroke="#2a1450" stroke-width="4"/>
+  <circle cx="60" cy="56" r="15" fill="#29e7ff" stroke="#2a1450" stroke-width="4"/>
+  <path d="M28 80 L8 116 L30 108 Z M92 80 L112 116 L90 108 Z" fill="#ff2bd6" stroke="#2a1450" stroke-width="4"/>
+  <path d="M38 104 Q60 160 82 104 Z" fill="#ffcc33"/><path d="M48 104 Q60 138 72 104 Z" fill="#fff6c8"/>
+</svg>`,
+};
+
+window.mascotURL = (k) => "data:image/svg+xml;charset=utf-8," + encodeURIComponent(MASCOTS[k]);
+// Coin faces for the 3D scenes: SOL coins (purple→green) and the coin's own $TICKER coins (gold)
+window.coinCanvas = (kind, ticker) => {
+  const c = document.createElement("canvas"); c.width = c.height = 256; const g = c.getContext("2d");
+  if (kind === "sol") {
+    const ring = g.createLinearGradient(0, 0, 256, 256); ring.addColorStop(0, "#9945ff"); ring.addColorStop(.5, "#43b4ca"); ring.addColorStop(1, "#14f195");
+    g.fillStyle = ring; g.fillRect(0, 0, 256, 256);
+    g.beginPath(); g.arc(128, 128, 104, 0, 7); g.fillStyle = "#120a24"; g.fill();
+    g.lineWidth = 6; g.strokeStyle = "rgba(255,255,255,.35)"; g.beginPath(); g.arc(128, 128, 96, 0, 7); g.stroke();
+    const tg = g.createLinearGradient(60, 60, 196, 196); tg.addColorStop(0, "#c58bff"); tg.addColorStop(1, "#3dffb5");
+    g.fillStyle = tg; g.font = "bold 128px Arial, sans-serif"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText("◎", 128, 120);
+    g.font = "bold 34px Impact, Arial Black, sans-serif"; g.fillStyle = "#fff"; g.fillText("SOL", 128, 196);
+  } else {
+    const gr = g.createRadialGradient(100, 90, 10, 128, 128, 128); gr.addColorStop(0, "#fff6c8"); gr.addColorStop(.5, "#ffcc33"); gr.addColorStop(1, "#a86b00");
+    g.fillStyle = gr; g.fillRect(0, 0, 256, 256);
+    g.lineWidth = 10; g.strokeStyle = "#8a5600"; g.beginPath(); g.arc(128, 128, 100, 0, 7); g.stroke();
+    for (let i = 0; i < 24; i++) { g.save(); g.translate(128, 128); g.rotate(i / 24 * Math.PI * 2); g.fillStyle = "#b07a00"; g.fillRect(-3, -124, 6, 14); g.restore(); }
+    const t = "$" + (ticker || "FEE"); g.fillStyle = "#6b4400"; g.textAlign = "center"; g.textBaseline = "middle";
+    g.font = `bold ${t.length > 6 ? 44 : 60}px Impact, Arial Black, sans-serif`; g.fillText(t, 128, 134);
+  }
+  return c;
+};
+// Optional custom mascot images: Netlify settings MASCOT_LEFT / MASCOT_RIGHT = an image file name in the site folder or an https link.
+window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
+
+</script>
 <div class="bg"><div class="stars"></div><div class="floor"></div><canvas id="bg3d"></canvas></div>
 
 <div class="tape"><div class="tape-inner" id="tape"></div></div>
@@ -398,6 +548,16 @@
       <button class="chip btn" id="introBtn" title="Replay the intro">🎬 INTRO</button>
     </div>
   </header>
+
+  <section class="heroban">
+    <img class="hb-m l" data-m="dog" alt="">
+    <div class="hb-text">
+      <div class="kick">◎ THE PUMP.FUN FEE CASINO ON SOLANA ◎</div>
+      <div class="big">EVERY <span id="hbMin">5</span> MIN ONE HOLDER WINS <em>50%</em> OF ALL CREATOR FEES</div>
+      <div class="tags"><span>🎰 AUTO PAYOUTS</span><span>🔒 PROVABLY FAIR</span><span>💎 JUST HOLD</span></div>
+    </div>
+    <img class="hb-m r" data-m="frog" alt="">
+  </section>
 
   <section class="castrip" id="castrip">
     <div class="lab">CA</div>
@@ -450,7 +610,7 @@
         <div class="stat p"><div class="k">Holders</div><div class="v" id="holdCount">–</div></div>
       </div>
       <div class="card">
-        <h2>HOW TO PLAY</h2>
+        <h2>HOW TO PLAY <img class="h2m" data-m="rocket" alt=""></h2>
         <div class="steps" id="steps">
           <div class="step"><div class="n">1</div><p><b>Buy &amp; hold 250,000+</b> tokens.</p></div>
           <div class="step"><div class="n">2</div><p><b>Hold 5 minutes</b> and your wallet lands on the wheel.</p></div>
@@ -458,6 +618,11 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <section class="card chartcard">
+    <h2>📈 LIVE CHART <small id="chartSrc">via DexScreener</small></h2>
+    <div class="chartwrap" id="chartWrap"><div class="chart-empty" id="chartEmpty">Loading chart…</div></div>
   </section>
 
   <section class="lower">
@@ -481,7 +646,7 @@
       <div class="card">
         <h2>HALL OF WINNERS</h2>
         <div id="history"><div class="hist-row"><span class="m">No spins yet. First one's coming.</span></div></div>
-        <p class="fair">Provably fair: winner = <code>sha256(blockhash : round : entries)</code> using a finalized Solana blockhash. Every round's full entry list is public at <code>/api/round/&lt;id&gt;</code>.</p>
+        <p class="fair">Provably fair: winner = <code>sha256(blockhash : round : entries)</code> using a finalized Solana blockhash. Every round's full entry list is public at <code>/api/round/&lt;id&gt;</code>. The wheel shuffles its order every round just for the show; the shuffle doesn't change anyone's odds.</p>
       </div>
     </div>
   </section>
@@ -508,7 +673,7 @@
 </div>
 
 <div id="chat" class="min">
-  <div class="ch" id="chatHead"><span>💬 DEGEN CHAT <span class="badge" id="chatBadge">0</span></span><small id="chatToggle">open ▴</small></div>
+  <div class="ch" id="chatHead"><span><img class="chm" data-m="cat" alt=""> DEGEN CHAT <span class="badge" id="chatBadge">0</span></span><small id="chatToggle">open ▴</small></div>
   <div class="cb">
     <div class="msgs" id="chatMsgs"><div class="m sys">gm degens. be nice, no links, never share your seed phrase.</div></div>
     <div class="err" id="chatErr"></div>
@@ -587,6 +752,13 @@ async function load() {
 
 function weightOf(h) { return state.config.weighting === "balance" ? Math.max(1, Math.floor(h.balance)) : 1; }
 const byOwner = (list) => [...list].sort((a, b) => (a.owner < b.owner ? -1 : 1));
+// The wheel shows wallets in a shuffled order per round. This is only how they're drawn:
+// the winner is still decided by the blockhash seed on the server.
+function fnv(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+let displayKey = null;
+const orderFor = (list, key) => [...list].map((h) => [fnv(h.owner + ":" + key), h]).sort((a, b) => a[0] - b[0] || (a[1].owner < b[1].owner ? -1 : 1)).map((x) => x[1]);
+let shuffleUntil = 0, shuffleTick = 0, pendingRound = null, landQueued = false;
+const SHUFFLE_MS = 3000;
 
 function render() {
   const s = state; if (!s) return;
@@ -597,7 +769,8 @@ function render() {
   const c = s.config;
   document.title = `$${c.ticker} · Wheel of Fee`;
   $("sub").textContent = `$${c.ticker} · 50% creator fees · every ${c.roundMinutes} min`;
-  renderCA(c);
+  if (window.__setMascots) { const q = new URLSearchParams(location.search); window.__setMascots({ left: c.mascots?.left || (DEMO && q.get("ml")) || null, right: c.mascots?.right || (DEMO && q.get("mr")) || null }); window.__setMascots = null; }
+  renderCA(c); setupChart(c); $("hbMin").textContent = c.roundMinutes;
   $("mqMin").textContent = c.roundMinutes;
   setHTML("steps", `
     <div class="step"><div class="n">1</div><p><b>Buy &amp; hold ${fmt(c.minTokens)}+</b> $${esc(c.ticker)}.</p></div>
@@ -610,8 +783,13 @@ function render() {
   $("listCount").textContent = `${s.eligible.length} wallet${s.eligible.length === 1 ? "" : "s"}`;
   $("potLink").textContent = short(c.potWallet); $("potLink").href = solscan("account", c.potWallet);
   renderRows(); renderHistory(); renderCheck(); renderTape();
+  if (displayKey === null) displayKey = s.lastRound?.id ?? Math.round(now() / (c.roundMinutes * 60000));
   if (mode === "idle") setWheel(s.eligible);
-  if (mode === "waiting" && s.lastRound && s.lastRound.id === awaitingRound) land(s.lastRound);
+  if (mode === "shuffling" && s.lastRound && s.lastRound.id === awaitingRound) pendingRound = s.lastRound;
+  if (mode === "waiting" && s.lastRound && s.lastRound.id === awaitingRound && !landQueued) {
+    landQueued = true; const r = s.lastRound;
+    setTimeout(() => { if (mode === "waiting") land(r); }, Math.max(0, 1500 - (performance.now() - spinStart)));   // always ≥1.5s full-speed spin
+  }
   if (mode === "idle" && s.lastRound && lastShownRound === null) showResult(s.lastRound, false);
 }
 
@@ -642,7 +820,7 @@ $("caFull").addEventListener("click", copyCA);
 function renderRows() {
   const list = state.eligible, total = list.reduce((a, h) => a + weightOf(h), 0);
   const mine = $("myWallet").value.trim();
-  const idx = new Map(byOwner(list).map((h, i) => [h.owner, i]));
+  const idx = new Map(orderFor(list, displayKey).map((h, i) => [h.owner, i]));
   $("empty").style.display = list.length ? "none" : "block";
   $("rows").innerHTML = list.map((h) => {
     const col = COLORS[idx.get(h.owner) % COLORS.length];
@@ -704,7 +882,7 @@ function tickPot() {
 // ---------- wheel ----------
 const cv = $("wheel"), ctx = cv.getContext("2d"), TAU = Math.PI * 2;
 const W = cv.width, CX = W / 2, CY = W / 2, R = W / 2 - 62;
-function setWheel(list) { wheelEntries = byOwner(list).map((h) => ({ owner: h.owner, weight: state ? weightOf(h) : 1 })); }
+function setWheel(list) { wheelEntries = orderFor(list, displayKey).map((h) => ({ owner: h.owner, weight: state ? weightOf(h) : 1 })); }
 function slices(entries) {
   const total = entries.reduce((a, e) => a + e.weight, 0) || 1;
   let a = 0;
@@ -784,13 +962,26 @@ function frame(t) {
   const dt = Math.min(0.05, (t - last) / 1000); last = t;
   if (mode === "idle") rot += IDLE_W * dt;              // after a spin the wheel stays on the winner
   else if (mode === "waiting") rot += SPIN_W * dt;
+  else if (mode === "shuffling") {
+    rot += 0.6 * dt;
+    if (t - shuffleTick > 110) {                            // scramble the slices ~9x per second
+      shuffleTick = t;
+      for (let i = wheelEntries.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [wheelEntries[i], wheelEntries[j]] = [wheelEntries[j], wheelEntries[i]]; }
+      beep(500 + Math.random() * 500, 0.03, "triangle", 0.02);
+    }
+    if (t >= shuffleUntil) {                                // final order for this round, then spin
+      displayKey = awaitingRound; setWheel(state.eligible);
+      mode = "waiting"; spinStart = performance.now(); beep(330, 0.25, "sawtooth", 0.04);
+      if (pendingRound) { const r = pendingRound; pendingRound = null; landQueued = true; setTimeout(() => { if (mode === "waiting") land(r); }, 1500); }
+    }
+  }
   else if (mode === "landing") {
     const p = Math.min(1, (t - anim.t0) / anim.dur);
     rot = anim.from + anim.dist * (1 - Math.pow(1 - p, 3));
     if (p >= 1) { mode = "showing"; showUntil = now() + 25_000; showResult(anim.round, true); }
   }
   if (mode === "showing" && now() > showUntil) { mode = "idle"; setWheel(state.eligible); }
-  bulbPhase += dt * (mode === "waiting" || mode === "landing" ? 14 : 2.2);
+  bulbPhase += dt * (mode === "waiting" || mode === "landing" ? 14 : mode === "shuffling" ? 24 : 2.2);
   const idx = underPointer();
   if (idx !== lastIdx) { if (mode === "waiting" || mode === "landing") { ptr = -22; beep(1400, 0.03, "square", 0.03); } lastIdx = idx; }
   ptr *= 0.82;
@@ -806,14 +997,17 @@ function tickTimer() {
   const next = Math.ceil(n / roundMs) * roundMs, left = next - n;
   const txt = `${Math.floor(left / 60000)}:${String(Math.floor(left % 60000 / 1000)).padStart(2, "0")}`;
   const hub = $("hub");
-  if (mode === "waiting" || mode === "landing") { hub.classList.add("live"); $("timer").textContent = "SPINNING"; $("hubSub").textContent = "good luck degens"; $("nextIn").textContent = "NOW"; }
+  if (mode === "shuffling") { hub.classList.add("live"); $("timer").textContent = "SHUFFLING"; $("hubSub").textContent = "randomizing wallets"; $("nextIn").textContent = "NOW"; }
+  else if (mode === "waiting" || mode === "landing") { hub.classList.add("live"); $("timer").textContent = "SPINNING"; $("hubSub").textContent = "good luck degens"; $("nextIn").textContent = "NOW"; }
   else { hub.classList.remove("live"); $("timer").textContent = txt; $("hubSub").textContent = "next spin"; $("nextIn").textContent = txt; }
   $("bar").style.width = ((1 - left / roundMs) * 100).toFixed(1) + "%";
   $("nextAt").textContent = "at " + new Date(next).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  if (mode !== "waiting" && mode !== "landing" && left > roundMs - 1500 && awaitingRound !== Math.round(n / roundMs)) {
-    awaitingRound = Math.round(n / roundMs);
+  if (mode !== "waiting" && mode !== "landing" && mode !== "shuffling" && left > roundMs - 1500 && awaitingRound !== Math.round(n / roundMs)) {
+    awaitingRound = Math.round(n / roundMs); pendingRound = null; landQueued = false;
     if (state.eligible.length) setWheel(state.eligible);
-    mode = "waiting"; spinStart = performance.now(); beep(220, 0.3, "sawtooth", 0.04);
+    if (wheelEntries.length > 1) { mode = "shuffling"; shuffleUntil = performance.now() + SHUFFLE_MS; }
+    else { mode = "waiting"; spinStart = performance.now(); }
+    beep(220, 0.3, "sawtooth", 0.04);
     if (wheelEntries.length) openStage(true);
     poll(0);
   }
@@ -821,17 +1015,17 @@ function tickTimer() {
 }
 
 async function poll(tries) {
-  if (mode !== "waiting") return;
+  if (mode !== "waiting" && mode !== "shuffling") return;
   if (tries > 60) { mode = "idle"; if (stageAuto) closeStage(); return; }
   await load();
-  if (mode === "waiting") setTimeout(() => poll(tries + 1), 1500);
+  if (mode === "waiting" || mode === "shuffling") setTimeout(() => poll(tries + 1), 1500);
 }
 
 async function land(round) {
   if (!hasWinner(round)) { mode = "showing"; showUntil = now() + 8000; showResult(round, true); if (stageAuto) setTimeout(closeStage, 2500); return; }
   let entries = null;
   try { entries = DEMO ? demo.round(round.id).entries : (await (await fetch(`/api/round/${round.id}`)).json()).entries; } catch {}
-  if (entries?.length) wheelEntries = entries.map((e) => ({ owner: e.owner, weight: e.weight }));
+  if (entries?.length) wheelEntries = orderFor(entries, round.id).map((e) => ({ owner: e.owner, weight: e.weight }));
   const sl = slices(wheelEntries);
   const w = sl.find((s) => s.owner === round.winner) || sl[round.winnerIndex] || sl[0];
   const span = w.end - w.start;
@@ -934,6 +1128,39 @@ const demo = (() => {
 })();
 
 
+
+// ---------- mascot images ----------
+document.querySelectorAll("img[data-m]").forEach((im) => { im.src = mascotURL(im.dataset.m); });
+mascotFiles.then((f) => { const l = document.querySelector(".hb-m.l"), r = document.querySelector(".hb-m.r");
+  if (f.left) { l.src = f.left; l.classList.add("custom"); } if (f.right) { r.src = f.right; r.classList.add("custom"); } });
+
+// ---------- live chart (DexScreener embed; needs the pair address, looked up from the CA) ----------
+let chartFor = null, chartTry = 0;
+async function setupChart(c) {
+  if (chartFor === c.mint) return; chartFor = c.mint;
+  const empty = $("chartEmpty");
+  if (DEMO) { empty.textContent = "Live chart shows here once the coin trades (demo mode)."; return; }
+  let pair = c.links?.chartPair || "";
+  if (!pair) {
+    try {
+      const r = await (await fetch(`https://api.dexscreener.com/latest/dex/tokens/${c.mint}`)).json();
+      const ps = (r.pairs || []).filter((x) => x.chainId === "solana")
+        .sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0) || (b.volume?.h24 || 0) - (a.volume?.h24 || 0));
+      pair = ps[0]?.pairAddress || "";
+    } catch {}
+  }
+  if (!pair) {
+    empty.innerHTML = `Chart appears as soon as DexScreener picks up the coin.<br><br><a class="lnk pump" href="${esc(c.links?.pumpfun || "https://pump.fun/coin/" + c.mint)}" target="_blank" rel="noopener">VIEW ON PUMP.FUN</a>`;
+    if (chartTry++ < 30) setTimeout(() => { chartFor = null; setupChart(c); }, 60000);
+    return;
+  }
+  const load = () => { $("chartWrap").innerHTML = `<iframe title="Live chart" loading="lazy" allow="clipboard-write" src="https://dexscreener.com/solana/${encodeURIComponent(pair)}?embed=1&theme=dark&trades=0&info=0"></iframe>`; };
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); load(); } }, { rootMargin: "300px" });
+    io.observe($("chartWrap"));
+  } else load();
+}
+
 // ---------- close-up stage: big wheel, zoomed in on the pointer when there are many wallets ----------
 const zcv = $("zoom"), zctx = zcv.getContext("2d");
 let zW = 0, zH = 0, zDpr = 1;
@@ -1028,7 +1255,7 @@ function drawStage() {
   // pointer + labels
   const zp = $("zptr"); zp.style.left = cx + "px"; zp.style.top = (top - 58) + "px";
   const spinning = mode === "waiting" || mode === "landing";
-  $("stA").textContent = spinning ? "🎰 SPINNING 🎰" : mode === "showing" ? "🏆 WE HAVE A WINNER" : `NEXT SPIN ${$("timer").textContent}`;
+  $("stA").textContent = mode === "shuffling" ? "🔀 RANDOMIZING WALLETS…" : spinning ? "🎰 SPINNING 🎰" : mode === "showing" ? "🏆 WE HAVE A WINNER" : `NEXT SPIN ${$("timer").textContent}`;
   $("stB").textContent = `${N} wallet${N === 1 ? "" : "s"} on the wheel${zoomed && W > 600 ? " · zoomed in on the pointer" : ""}`;
   const now_ = $("stNow");
   if (ptrSlice && N > 1 && !$("stWin").classList.contains("show")) { now_.style.display = "block"; now_.textContent = "▲ " + short(ptrSlice.s.owner) + " ▲"; }
@@ -1094,10 +1321,222 @@ pollChat(); setInterval(() => pollChat(), 4000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden) { pollChat(); load(); } });
 
 $("introBtn").addEventListener("click", () => window.playIntro && window.playIntro(true));
-load(); setInterval(() => { if (mode !== "waiting" && !document.hidden) load(); }, 6000);
+load(); setInterval(() => { if (mode !== "waiting" && mode !== "shuffling" && !document.hidden) load(); }, 6000);
 requestAnimationFrame(frame);
 </script>
 
+
+
+<!-- ================= 3D WHEEL on the main page ================= -->
+<script type="module">
+import * as THREE from "three";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+const box = document.getElementById("wheelBox"), src = document.getElementById("wheel"), hub = document.getElementById("hub");
+const QS = new URLSearchParams(location.search);
+if (!QS.has("no3d")) { try { init(); } catch (e) { console.warn("3D wheel off:", e); box.classList.remove("w3d"); } }
+
+function svgTexture(svg, cb) {
+  const img = new Image();
+  img.onload = () => { const c = document.createElement("canvas"); c.width = 480; c.height = 520; c.getContext("2d").drawImage(img, 0, 0, 480, 520);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; cb(t); };
+  img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+}
+
+function init() {
+  const canvas = document.createElement("canvas"); canvas.id = "wheel3d";
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+  box.classList.add("w3d"); box.insertBefore(canvas, box.firstChild);
+  document.querySelectorAll(".cabinet .chips3d, .cabinet .dice").forEach((e) => e.remove());   // the 3D stage has its own
+  const mobile = !matchMedia("(hover: hover) and (min-width: 900px)").matches;
+  renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.5 : 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(36, 1.12, 0.1, 200);
+  const disposables = [];
+  const std = (o) => { const m = new THREE.MeshStandardMaterial(o); disposables.push(m); return m; };
+  const gold = std({ color: 0xffc233, metalness: 0.95, roughness: 0.22, emissive: 0x3a2400, emissiveIntensity: 0.35 });
+  const darkGold = std({ color: 0x8a5a00, metalness: 0.9, roughness: 0.35 });
+
+  // backdrop: velvet curtain wall + spotlight glow, so the stage has its own room
+  const bgTex = (() => { const c = document.createElement("canvas"); c.width = 512; c.height = 512; const g = c.getContext("2d");
+    const gr = g.createRadialGradient(256, 200, 20, 256, 256, 360); gr.addColorStop(0, "#5a1a7a"); gr.addColorStop(.45, "#2a0a40"); gr.addColorStop(1, "#0c0216");
+    g.fillStyle = gr; g.fillRect(0, 0, 512, 512);
+    for (let x = 0; x < 512; x += 18) { const l = g.createLinearGradient(x, 0, x + 18, 0); l.addColorStop(0, "rgba(0,0,0,.35)"); l.addColorStop(.5, "rgba(255,255,255,.05)"); l.addColorStop(1, "rgba(0,0,0,.35)"); g.fillStyle = l; g.fillRect(x, 0, 18, 512); }
+    const sp = g.createRadialGradient(256, 170, 0, 256, 170, 220); sp.addColorStop(0, "rgba(255,220,150,.35)"); sp.addColorStop(1, "rgba(255,220,150,0)"); g.fillStyle = sp; g.fillRect(0, 0, 512, 512);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; })();
+  scene.background = bgTex;
+  // reflections so gold and coins actually shine
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environmentIntensity = 0.55;
+  // lights
+  scene.add(new THREE.AmbientLight(0xffffff, 0.45));
+  scene.add(new THREE.HemisphereLight(0xff9ae8, 0x1a0630, 0.6));
+  const key = new THREE.DirectionalLight(0xfff2d0, 2.2); key.position.set(3, 8, 12); scene.add(key);
+  const pl1 = new THREE.PointLight(0xff2bd6, 60, 40); pl1.position.set(-9, 4, 6); scene.add(pl1);
+  const pl2 = new THREE.PointLight(0x29e7ff, 50, 40); pl2.position.set(9, -2, 6); scene.add(pl2);
+
+  // ---- the wheel: the 2D wheel drawing is the face texture, so spin/shuffle logic stays identical ----
+  const tex = new THREE.CanvasTexture(src); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  const wheel = new THREE.Group(); scene.add(wheel);
+  wheel.rotation.x = -0.1;
+  const face = new THREE.Mesh(new THREE.CircleGeometry(5, 160), std({ map: tex, emissive: 0xffffff, emissiveMap: tex, emissiveIntensity: 0.22, roughness: 0.6, metalness: 0.0, envMapIntensity: 0, transparent: true }));
+  face.position.z = 0.26; wheel.add(face);
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(5.02, 5.1, 0.5, 120, 1, true), gold); body.rotation.x = Math.PI / 2; wheel.add(body);
+  const back = new THREE.Mesh(new THREE.CircleGeometry(5.1, 96), darkGold); back.position.z = -0.25; back.rotation.y = Math.PI; wheel.add(back);
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(5.0, 0.2, 20, 180), gold); rim.position.z = 0.28; wheel.add(rim);
+  const rim2 = new THREE.Mesh(new THREE.TorusGeometry(4.45, 0.07, 12, 160), gold); rim2.position.z = 0.3; wheel.add(rim2);
+  // 3D bulbs ring (static, like a real game-show wheel), chase pattern follows the 2D bulbs
+  const NB = 44, bulbs = [];
+  const bulbGeo = new THREE.SphereGeometry(0.13, 14, 14);
+  for (let k = 0; k < NB; k++) {
+    const a = k / NB * Math.PI * 2;
+    const m = new THREE.MeshBasicMaterial({ color: 0xfff6c8 }); disposables.push(m);
+    const b = new THREE.Mesh(bulbGeo, m); b.position.set(Math.cos(a) * 4.68, -Math.sin(a) * 4.68, 0.42); wheel.add(b); bulbs.push(b);
+  }
+  // 3D pointer (flaps when a slice passes)
+  const ptrPivot = new THREE.Group(); ptrPivot.position.set(0, 5.75, 0.7); ptrPivot.scale.setScalar(1.55); wheel.add(ptrPivot);
+  const ptrCone = new THREE.Mesh(new THREE.ConeGeometry(0.42, 1.25, 4), gold); ptrCone.rotation.z = Math.PI; ptrCone.rotation.y = Math.PI / 4; ptrCone.position.y = -0.7; ptrPivot.add(ptrCone);
+  const gem = new THREE.Mesh(new THREE.SphereGeometry(0.34, 24, 24), std({ color: 0xff2040, emissive: 0xff0030, emissiveIntensity: 0.9, roughness: 0.15, metalness: 0.2 })); ptrPivot.add(gem);
+  const gemRing = new THREE.Mesh(new THREE.TorusGeometry(0.36, 0.08, 10, 30), gold); ptrPivot.add(gemRing);
+
+  // stand + stage
+  [-1, 1].forEach((sd) => { const leg = new THREE.Mesh(new THREE.BoxGeometry(0.5, 6.4, 0.5), darkGold); leg.position.set(sd * 2.4, -4.6, -0.6); leg.rotation.z = sd * 0.28; scene.add(leg); });
+  const stage = new THREE.Mesh(new THREE.CylinderGeometry(6.6, 7.2, 0.7, 96), std({ color: 0x1a0630, metalness: 0.5, roughness: 0.35 })); stage.position.set(0, -7.55, -0.5); scene.add(stage);
+  const felt = new THREE.Mesh(new THREE.CircleGeometry(6.55, 96), std({ color: 0x0d6b3a, roughness: 0.95 })); felt.rotation.x = -Math.PI / 2; felt.position.set(0, -7.19, -0.5); scene.add(felt);
+  const ringMat = new THREE.MeshBasicMaterial({ color: 0xff2bd6 }); disposables.push(ringMat);
+  const stageRing = new THREE.Mesh(new THREE.TorusGeometry(6.9, 0.06, 8, 120), ringMat); stageRing.rotation.x = Math.PI / 2; stageRing.position.set(0, -7.2, -0.5); scene.add(stageRing);
+
+  const dummy = new THREE.Object3D();
+  // coin stacks on the felt: SOL coins + the coin's own $TICKER coins
+  const faceTex = (kind) => { const t = new THREE.CanvasTexture(coinCanvas(kind, (typeof state === "object" && state) ? state?.config?.ticker : null)); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
+  const solTex = faceTex("sol"), tokTex = faceTex("tok");
+  const solFace = std({ map: solTex, metalness: 0.55, roughness: 0.3, emissive: 0xffffff, emissiveMap: solTex, emissiveIntensity: 0.12 });
+  const tokFace = std({ map: tokTex, metalness: 0.7, roughness: 0.25, emissive: 0xffffff, emissiveMap: tokTex, emissiveIntensity: 0.18 });
+  const solEdge = std({ color: 0x7a4dff, metalness: 0.8, roughness: 0.25, emissive: 0x2a0a6b, emissiveIntensity: 0.4 });
+  const tokEdge = std({ color: 0xffc233, metalness: 1, roughness: 0.2, emissive: 0x3a2400, emissiveIntensity: 0.4 });
+  const SOLM = [solEdge, solFace, solFace], TOKM = [tokEdge, tokFace, tokFace];
+  const coinGeo = new THREE.CylinderGeometry(0.46, 0.46, 0.09, 40);
+  const stacks = [[-4.6, 0.6, 9, 1], [-3.6, 1.7, 5, 0], [3.7, 1.5, 7, 1], [4.6, 0.4, 11, 0], [-2.7, 2.5, 4, 0], [2.8, 2.6, 6, 1]];
+  stacks.forEach(([x, z, n, sol]) => {
+    for (let i = 0; i < n; i++) { const c = new THREE.Mesh(coinGeo, sol ? SOLM : TOKM); c.position.set(x + (Math.random() - .5) * 0.06, -7.15 + i * 0.092, z - 0.5); c.rotation.y = Math.random() * 6; scene.add(c); }
+    const top = new THREE.Mesh(coinGeo, sol ? SOLM : TOKM); top.position.set(x + 0.5, -7.05, z - 0.2); top.rotation.set(1.2, 0.3, 0.4); scene.add(top);   // one tipped-over coin
+  });
+
+  // jackpot pile in front of the wheel: grows with the pot
+  const PILE_MAX = mobile ? 40 : 70;
+  const pile = new THREE.InstancedMesh(coinGeo, TOKM, PILE_MAX), pileSol = new THREE.InstancedMesh(coinGeo, SOLM, PILE_MAX);
+  scene.add(pile); scene.add(pileSol);
+  const pileSpots = Array.from({ length: PILE_MAX }, (_, i) => { const a = i * 2.399, r = 0.25 + Math.sqrt(i) * 0.24, h = Math.max(0, 1.1 - r * 0.55);
+    return { x: Math.cos(a) * r * 1.25, z: 2.6 + Math.sin(a) * r * 0.6, y: -7.12 + h * (0.4 + Math.random() * 0.6), rx: (Math.random() - .5) * 0.9, rz: (Math.random() - .5) * 0.9, ry: Math.random() * 6 }; });
+  let pileShown = -1;
+  function updatePile() {
+    const pot = typeof potShown === "number" ? potShown : 0;
+    const n = Math.max(6, Math.min(PILE_MAX, Math.round(6 + Math.sqrt(pot) * 60)));
+    if (n === pileShown) return; pileShown = n;
+    let a = 0, b = 0;
+    pileSpots.slice(0, n).forEach((p, i) => { dummy.position.set(p.x, p.y, p.z - 0.5); dummy.rotation.set(p.rx, p.ry, p.rz); dummy.updateMatrix();
+      (i % 3 === 0 ? pileSol : pile).setMatrixAt(i % 3 === 0 ? a++ : b++, dummy.matrix); });
+    pile.count = b; pileSol.count = a; pile.instanceMatrix.needsUpdate = pileSol.instanceMatrix.needsUpdate = true;
+  }
+
+  // falling SOL coins
+  const NC = mobile ? 18 : 40;
+  const coins = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.3, 0.3, 0.06, 32), SOLM, NC);
+  scene.add(coins);
+  const cd = Array.from({ length: NC }, () => ({ x: (Math.random() - .5) * 18, y: Math.random() * 16 - 6, z: -3 + Math.random() * 2, v: 1 + Math.random() * 1.6, r: Math.random() * 6, vr: 1 + Math.random() * 3 }));
+
+  // mascots on stage (original art)
+  const mascots = [];
+  const addMascot = (k, side, delay, file) => (file ? (cb) => new THREE.TextureLoader().load(file, (t) => { t.colorSpace = THREE.SRGBColorSpace; t.userData.aspect = t.image.height / t.image.width; cb(t); }) : (cb) => svgTexture(window.MASCOTS[k], cb))((t) => {
+    const mat = new THREE.SpriteMaterial({ map: t, transparent: true }); disposables.push(mat);
+    const sp = new THREE.Sprite(mat); sp.userData = { side, delay }; scene.add(sp); mascots.push(sp); layout();
+  });
+  mascotFiles.then((f) => { addMascot("dog", -1, 0, f.left); addMascot("frog", 1, 1.6, f.right); });
+
+  // bloom on desktop only
+  let composer = null;
+  if (!mobile) {
+    composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    composer.addPass(new UnrealBloomPass(new THREE.Vector2(512, 512), 0.45, 0.4, 0.92));
+    composer.addPass(new OutputPass());
+  }
+
+  // ---- camera framing + HTML hub placed over the projected wheel centre ----
+  let W = 0, H = 0, halfW = 8;
+  const target = new THREE.Vector3(0, -0.45, 0);
+  function layout() {
+    W = box.clientWidth; H = box.clientHeight; if (!W || !H) return;
+    renderer.setSize(W, H, false); composer?.setSize(W, H);
+    camera.aspect = W / H;
+    const t = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    const needH = 14.2, needW = mobile && W / H < 1.3 ? 12.6 : 17.5;              // room for wheel+stage (and mascots on wide screens)
+    const dist = Math.max(needH / (2 * t), needW / (2 * t * camera.aspect));
+    camera.position.set(0, 0.6, dist); camera.lookAt(target); camera.updateProjectionMatrix();
+    halfW = t * dist * camera.aspect;
+    mascots.forEach((m) => {
+      const s = Math.min(4.2, Math.max(2.6, halfW * 0.42));
+      m.scale.set(s, s * (m.material.map?.userData?.aspect || 1.083), 1);
+      m.userData.x = m.userData.side * Math.min(halfW - s * 0.56, 7.4);
+      m.userData.y = -7.2 + s * 0.52;
+    });
+    placeHub();
+  }
+  const v = new THREE.Vector3();
+  function placeHub() {
+    wheel.updateMatrixWorld();
+    const c = v.set(0, 0, 0.3).applyMatrix4(wheel.matrixWorld).project(camera);
+    const cx = (c.x + 1) / 2 * W, cy = (1 - c.y) / 2 * H;
+    const e = v.set(1.55, 0, 0.3).applyMatrix4(wheel.matrixWorld).project(camera);
+    const r = Math.abs((e.x + 1) / 2 * W - cx);
+    box.style.setProperty("--hubx", cx + "px"); box.style.setProperty("--huby", cy + "px");
+    box.style.setProperty("--hubw", (2 * r) + "px"); box.style.setProperty("--hubpx", (2 * r) + "px");
+  }
+  new ResizeObserver(layout).observe(box); layout();
+
+  // gentle camera sway + mouse parallax
+  let mx = 0, my = 0;
+  if (!mobile) { box.addEventListener("mousemove", (e) => { const r = box.getBoundingClientRect(); mx = (e.clientX - r.left) / r.width - .5; my = (e.clientY - r.top) / r.height - .5; });
+    box.addEventListener("mouseleave", () => { mx = my = 0; }); }
+
+  let last = performance.now(), acc = 0, t = 0;
+  function loop(now) {
+    requestAnimationFrame(loop);
+    const dt = Math.min(0.1, (now - last) / 1000); last = now; acc += dt;
+    if (mobile && acc < 1 / 30) return;
+    const step = acc; acc = 0; t += step;
+    if (document.hidden || document.body.classList.contains("intro-open")) return;
+    const r = box.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;   // off-screen: skip
+    tex.needsUpdate = true;
+    updatePile();
+    const tk = (typeof state === "object" && state) ? state?.config?.ticker : null;
+    if (!tokTex.userData.ok && tk) { tokTex.userData.ok = true; tokTex.image = coinCanvas("tok", tk); tokTex.needsUpdate = true; }
+    // bulbs follow the same chase as the 2D wheel
+    const ph = Math.floor(typeof bulbPhase === "number" ? bulbPhase : t * 2), live = typeof mode === "string" && mode !== "idle" && mode !== "showing";
+    bulbs.forEach((b, k) => b.material.color.setHex((k + ph) % 3 === 0 ? (live ? 0xffc0f0 : 0xfff6c8) : 0x4a2a08));
+    ptrPivot.rotation.z = THREE.MathUtils.degToRad(typeof ptr === "number" ? ptr : 0) * 1.4;
+    gem.material.emissiveIntensity = live ? 1.4 + Math.sin(t * 20) * 0.5 : 0.9;
+    stageRing.material.color.setHSL((t * 0.08 + 0.85) % 1, 1, 0.6);
+    for (let i = 0; i < NC; i++) { const c = cd[i]; c.y -= c.v * step; c.r += c.vr * step; if (c.y < -7) { c.y = 9; c.x = (Math.random() - .5) * 18; }
+      dummy.position.set(c.x, c.y, c.z); dummy.rotation.set(c.r, c.r * .6, 0); dummy.updateMatrix(); coins.setMatrixAt(i, dummy.matrix); }
+    coins.instanceMatrix.needsUpdate = true;
+    mascots.forEach((m) => { const d = m.userData; m.position.set(d.x ?? 0, (d.y ?? -5) + Math.abs(Math.sin(t * 2 + d.delay)) * 0.35, 1.6); m.material.rotation = Math.sin(t * 1.5 + d.delay) * 0.05; });
+    camera.position.x += (mx * 2.2 - camera.position.x) * 0.06;
+    camera.position.y += (0.6 - my * 1.4 - camera.position.y) * 0.06;
+    camera.lookAt(target);
+    if (mx || my) placeHub();
+    composer ? composer.render() : renderer.render(scene, camera);
+  }
+  requestAnimationFrame(loop);
+}
+</script>
 
 <!-- ================= 3D background: floating casino chips, coins & dice (desktop) ================= -->
 <script type="module">
@@ -1135,9 +1574,11 @@ function start() {
   const chipCols = ["#e0123a", "#1d4ed8", "#0f9d58", "#111111", "#8b5cff", "#ff8a1f"];
   const chipGeo = new THREE.CylinderGeometry(1, 1, 0.22, 48);
   const edgeMat = (col) => new THREE.MeshStandardMaterial({ color: col, roughness: 0.4, metalness: 0.1 });
+  const ctex = (k) => { const t = new THREE.CanvasTexture(coinCanvas(k, (typeof state === "object" && state) ? state?.config?.ticker : null)); t.colorSpace = THREE.SRGBColorSpace; return t; };
+  const solF = new THREE.MeshStandardMaterial({ map: ctex("sol"), roughness: 0.3, metalness: 0.5 }), tokF = new THREE.MeshStandardMaterial({ map: ctex("tok"), roughness: 0.25, metalness: 0.8 });
   for (let i = 0; i < 14; i++) {
-    const col = chipCols[i % chipCols.length], face = new THREE.MeshStandardMaterial({ map: chipFace(col), roughness: 0.45 });
-    objs.push(new THREE.Mesh(chipGeo, [edgeMat(col), face, face]));
+    const sol = i % 2 === 0;
+    objs.push(new THREE.Mesh(chipGeo, [edgeMat(sol ? "#7a4dff" : "#ffc233"), sol ? solF : tokF, sol ? solF : tokF]));
   }
   const coinGeo = new THREE.CylinderGeometry(0.75, 0.75, 0.12, 40);
   const coinMat = new THREE.MeshStandardMaterial({ map: coinFace, metalness: 0.9, roughness: 0.25, emissive: 0x3a2400, emissiveIntensity: 0.5 });
