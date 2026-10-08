@@ -349,6 +349,9 @@
   .cabinet::before { top: 0; } .cabinet::after { bottom: 0; }
   .tape { contain: paint; } .bg { contain: strict; }
   @media (max-width: 700px) { .sticker { font-size: 10px; padding: 3px 7px; } .cabinet .marquee { font-size: 12px; margin-top: 26px; } }
+  /* phones: chat bubble bottom-LEFT (Netlify's own badge sits bottom-right) */
+  @media (max-width: 960px) { #chat:not(.docked).min { right: auto; left: 12px; bottom: 12px; } #chat:not(.docked):not(.min) { bottom: 12px; } }
+  @media (max-width: 960px) { #chat.min #chatToggle { display: none; } }
   /* ---------- 3D intro ---------- */
   #intro { position: fixed; inset: 0; z-index: 100; background: #07020f; display: none; transition: opacity .9s ease; }
   #intro.show { display: block; }
@@ -961,10 +964,11 @@ function drawStage() {
   c.setTransform(zDpr, 0, 0, zDpr, 0, 0); c.clearRect(0, 0, W, H);
   // whole wheel fills ~3/4 of the screen; with many wallets it grows so every slice gets a readable label
   const R0 = Math.min(W * 0.46, H * 0.39);
-  const need = N ? (16 * N) / TAU + 90 : R0;
+  const need = N ? (13.5 * N) / TAU + 100 : R0;          // radius at which every label gets ~13px text
   const R = Math.max(R0, Math.min(need, 9000));
-  const zoomed = R > R0 * 1.02;
-  const top = zoomed ? 118 : Math.max(118, (H - 2 * R) / 2 + 30);
+  const fits = 2 * R + 170 < H;                          // whole wheel fits on screen → centre it
+  const top = fits ? Math.max(118, (H - 2 * R) / 2 + 30) : 118;
+  const zoomed = !fits && R > R0 * 1.02;
   const cx = W / 2, cy = top + R;
   const lim = zoomed ? Math.acos(Math.max(-1, Math.min(1, (cy - H - 40) / R))) + 0.03 : 9;
   const rel = (a) => { a = ((a + Math.PI) % TAU + TAU) % TAU - Math.PI; return a; };
@@ -999,8 +1003,9 @@ function drawStage() {
     const arc = (s.end - s.start) * labelR;
     if (arc > 3 && N > 1) { c.strokeStyle = "rgba(255,240,166,.9)"; c.lineWidth = arc > 30 ? 2 : 1; c.stroke(); }
     if (s.i === ptrIdx) ptrSlice = { s, a0, a1 };
-    if (arc >= 11) {
-      const fs = Math.max(11, Math.min(28, arc * 0.72));
+    // font size so the whole label (≈5.4× font size long) still fits inside the slice near the centre
+    const ang = s.end - s.start, fs = Math.min(28, arc * 0.72, ang * labelR / (0.95 + 5.4 * ang));
+    if (fs >= 10) {
       c.save(); c.translate(cx, cy); c.rotate((a0 + a1) / 2);
       c.font = `700 ${fs}px JetBrains Mono, monospace`; c.textAlign = "right"; c.textBaseline = "middle";
       c.fillStyle = "#12041f"; c.fillText(short(s.owner), labelR, 1); c.restore();
