@@ -1,6 +1,6 @@
 # Fee Wheel (one-folder version)
 
-All 7 files sit in one folder. No subfolders, nothing to install.
+All 8 files sit in one folder. No subfolders, nothing to install.
 
 | File | What it is |
 |---|---|
@@ -8,13 +8,14 @@ All 7 files sit in one folder. No subfolders, nothing to install.
 | `tick.mjs` | runs every minute: reads holders, and every 5 min claims fees, picks a winner, pays |
 | `state.mjs` | data for the website (`/api/state`) |
 | `round.mjs` | full details of a round, for checking fairness (`/api/round/<id>`) |
+| `chat.mjs` | anonymous chat (`/api/chat`) |
 | `debug.mjs` | setup checker (`/api/debug`) |
 | `netlify.toml` | tells Netlify how it fits together |
 | `README.md` | this file |
 
 ## Put it online (GitHub)
 1. On GitHub: open the repo (or make a new one) → **Add file → Upload files**.
-2. Select **all 7 files** at once (Ctrl+A in the folder) and drag them in → **Commit changes**.
+2. Select **all 8 files** at once (Ctrl+A in the folder) and drag them in → **Commit changes**.
    Delete any old files/folders from earlier uploads (`public`, `netlify`, `package.json`, `package-lock.json`).
 3. Netlify (site linked to this repo) builds by itself. Build command: leave empty.
 4. Open `https://<your-site>.netlify.app/api/debug` → every check should say `"ok": true`.
@@ -24,6 +25,12 @@ Required: `TOKEN_MINT` (the CA), `RPC_URL` (Helius link), `POT_PRIVATE_KEY` (pot
 Optional: `TICKER`, `EXCLUDE_WALLETS` (comma separated), `DRY_RUN` (`true` = no payouts),
 `CLAIM_FEES` (`true`), `MIN_TOKENS` (250000), `MIN_HOLD_MINUTES` (5), `ROUND_MINUTES` (5),
 `MIN_POT_SOL` (0.01), `RESERVE_SOL` (0.005), `WEIGHTING` (`equal` or `balance`).
+
+Links on the page (optional, must start with https://): `X_URL`, `TELEGRAM_URL`, `PUMPFUN_URL`
+(pump.fun and the chart link are filled in automatically from the CA).
+Chat moderation (optional): `CHAT_ADMIN_KEY` = any secret password. Then, from the browser console on the site:
+`fetch("/api/chat",{method:"POST",body:JSON.stringify({admin:"YOUR_KEY",clear:true})})` clears the chat;
+use `{admin:"YOUR_KEY",ban:"<anon id>"}` to mute someone (the id is the color code shown in /api/chat).
 After changing a setting: **Deploys → Trigger deploy**.
 
 Demo of the page without any backend: `/?demo` (or `/?demo&fast` for 30-second rounds).
