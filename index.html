@@ -396,6 +396,100 @@
   .wheel-box.w3d .hub .t { font-size: clamp(18px, calc(var(--hubpx, 160px) * .26), 52px); }
   .wheel-box.w3d .hub.live .t { font-size: clamp(12px, calc(var(--hubpx, 160px) * .13), 26px); }
   @media (max-width: 700px) { .chips3d, .dice { display: none; } }
+
+  /* ---------- v5: live, vote, predict, boards, drama ---------- */
+  .chip.live { color: var(--text); border-color: rgba(57,255,136,.4); }
+  .chip.live b { font-family: var(--display); color: var(--green); }
+  .dotlive { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); animation: pulse .9s infinite alternate; display: inline-block; }
+  .chip.btn.on { border-color: var(--gold); color: var(--gold); }
+
+  .statstrip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: -6px 0 22px; }
+  .sx { border-radius: 16px; padding: 12px 14px; text-align: center; background: linear-gradient(180deg, rgba(255,204,51,.12), rgba(0,0,0,.35)); border: 1px solid rgba(255,204,51,.3); }
+  .sx .k { font: 10px var(--mono); letter-spacing: .18em; color: var(--muted); }
+  .sx .v { font: clamp(16px, 2.4vw, 26px) var(--display); color: var(--gold2); text-shadow: 0 0 12px rgba(255,204,51,.5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  @media (max-width: 700px) { .statstrip { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+  .reactbar { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+  .reactbar button { font-size: 22px; line-height: 1; padding: 8px 10px; border-radius: 14px; border: 1px solid rgba(255,255,255,.15); background: rgba(0,0,0,.4); transition: transform .1s; }
+  .reactbar button:active { transform: scale(1.3); }
+  .reactbar.st { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); flex-direction: column; z-index: 6; margin: 0; }
+  #floats { position: fixed; inset: 0; pointer-events: none; z-index: 58; overflow: hidden; }
+  #floats span { position: absolute; bottom: -40px; font-size: 34px; animation: rise 3.2s ease-out forwards; filter: drop-shadow(0 4px 8px rgba(0,0,0,.6)); }
+  @keyframes rise { 0% { transform: translate(0, 0) scale(.6); opacity: 0; } 10% { opacity: 1; } 100% { transform: translate(var(--dx), -70vh) scale(1.3) rotate(var(--rot)); opacity: 0; } }
+
+  .mega { margin-top: 10px; font: 13px var(--display); letter-spacing: .06em; color: var(--muted); }
+  .mega.on { color: #0b0418; background: linear-gradient(90deg, var(--gold), var(--pink)); padding: 8px 12px; border-radius: 12px; text-align: center; animation: pulse .6s infinite alternate; }
+
+  .vote .vopts { display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 8px; }
+  .vbtn { position: relative; overflow: hidden; border-radius: 14px; padding: 12px 6px 10px; border: 2px solid rgba(255,255,255,.12); background: rgba(0,0,0,.35); text-align: center; }
+  .vbtn .bar { position: absolute; left: 0; bottom: 0; height: 100%; background: linear-gradient(180deg, rgba(139,92,255,.35), rgba(255,43,214,.35)); transition: width .5s; z-index: 0; }
+  .vbtn .n { position: relative; font: 26px/1 var(--display); color: #fff; }
+  .vbtn .l { position: relative; font: 10px var(--mono); color: var(--muted); letter-spacing: .1em; }
+  .vbtn .c { position: relative; font: 12px var(--mono); color: var(--gold); margin-top: 4px; }
+  .vbtn.mine { border-color: var(--green); box-shadow: 0 0 16px rgba(57,255,136,.4); }
+  .vbtn.lead .n { color: var(--gold2); text-shadow: 0 0 12px var(--gold); }
+  .vnote { font: 12px var(--mono); color: var(--muted); margin-top: 10px; }
+  .vhist { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .vhist span { font: 11px var(--mono); padding: 4px 8px; border-radius: 99px; background: rgba(255,255,255,.06); color: var(--muted); }
+  .vhist span b { color: var(--text); }
+
+  .games { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 22px; }
+  @media (max-width: 960px) { .games { grid-template-columns: 1fr; } }
+  .games h3 { font: 13px var(--display); letter-spacing: .1em; color: var(--muted); margin: 16px 0 8px; }
+  .popts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .pbtn { border-radius: 14px; padding: 10px 4px; border: 2px solid rgba(255,255,255,.12); background: rgba(0,0,0,.35); text-align: center; }
+  .pbtn .e { font-size: 30px; } .pbtn .n { font: 12px var(--display); } .pbtn .d { font: 9px var(--mono); color: var(--muted); } .pbtn .c { font: 11px var(--mono); color: var(--gold); }
+  .pbtn.mine { border-color: var(--cyan); box-shadow: 0 0 16px rgba(41,231,255,.4); }
+  .pres { font: 12px var(--mono); color: var(--muted); margin-top: 10px; min-height: 18px; } .pres b { color: var(--green); }
+  .lb { display: grid; gap: 6px; }
+  .lb .r { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 7px 10px; border-radius: 10px; background: rgba(255,255,255,.04); font: 13px var(--mono); }
+  .lb .r .i { font: 13px var(--display); color: var(--muted); } .lb .r:nth-child(1) .i { color: var(--gold); } .lb .r:nth-child(2) .i { color: #d8d8e8; } .lb .r:nth-child(3) .i { color: #e09a5a; }
+  .lb .r .v { color: var(--green); } .lb .r.me { outline: 2px solid var(--gold); }
+  .lb .m { font: 12px var(--mono); color: var(--muted); padding: 8px 0; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .tabs button { font: 11px var(--display); letter-spacing: .06em; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: rgba(0,0,0,.3); color: var(--muted); }
+  .tabs button.on { color: #0b0418; background: var(--gold); border-color: var(--gold); }
+
+  .mwrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+  .phantom { border: 0; border-radius: 12px; padding: 0 14px; font: 13px var(--display); color: #fff; background: linear-gradient(135deg, #ab9ff2, #6c5ce7); }
+  .check-out .mine-stat { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  .check-out .mine-stat div { background: rgba(0,0,0,.3); border-radius: 10px; padding: 8px; text-align: center; font: 10px var(--mono); color: var(--muted); }
+  .check-out .mine-stat b { display: block; font: 18px var(--display); color: var(--gold2); }
+
+  .sharebar { display: flex; gap: 8px; justify-content: center; margin: 10px 0; flex-wrap: wrap; }
+  .shx { border: 1px solid rgba(255,255,255,.25); background: #000; color: #fff; border-radius: 10px; padding: 9px 14px; font: 13px var(--display); }
+  .stage-win .wl, .modal .wl { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+  .wl span { font: 700 13px var(--mono); padding: 3px 8px; border-radius: 8px; background: rgba(255,255,255,.08); }
+  .wl span.me { background: var(--gold); color: #0b0418; }
+
+  /* final countdown */
+  #cd { position: fixed; inset: 0; z-index: 45; display: none; place-items: center; pointer-events: none; background: radial-gradient(closest-side, rgba(10,2,20,.55), transparent); }
+  #cd.show { display: grid; }
+  #cd .n { font: clamp(120px, 30vw, 300px)/1 var(--display); color: var(--gold2); text-shadow: 0 0 30px var(--gold), 0 0 80px var(--pink), 8px 8px 0 #6b0b5e; animation: cdpop .9s ease-out; }
+  #cd .t { position: absolute; top: calc(50% + clamp(70px, 16vw, 160px)); font: clamp(16px, 3vw, 26px) var(--display); letter-spacing: .3em; color: #fff; text-shadow: 0 0 12px var(--pink); }
+  @keyframes cdpop { from { transform: scale(1.6); opacity: 0; } 40% { opacity: 1; } }
+  .cdm { position: absolute; bottom: 4vh; width: clamp(90px, 16vw, 180px); animation: shake .25s infinite alternate; }
+  .cdm.l { left: 3vw; } .cdm.r { right: 3vw; animation-delay: -.12s; }
+  @keyframes shake { from { transform: rotate(-4deg) translateY(0); } to { transform: rotate(4deg) translateY(-6px); } }
+
+  /* stage mascots: nervous while spinning, party on a win, sad on a rollover */
+  .stm { position: absolute; bottom: 3vh; width: clamp(80px, 13vw, 170px); z-index: 3; pointer-events: none; transition: filter .3s; }
+  .stm.l { left: 2vw; } .stm.r { right: 2vw; }
+  #stage.nervous .stm { animation: shake .2s infinite alternate; }
+  #stage.party .stm { animation: party .5s infinite alternate ease-in-out; }
+  #stage.sad .stm { transform: rotate(-10deg) translateY(10px); filter: grayscale(.7) brightness(.7); }
+  @keyframes party { from { transform: translateY(0) rotate(-8deg) scale(1); } to { transform: translateY(-34px) rotate(8deg) scale(1.08); } }
+  #zoom { transform-origin: 50% 0; }
+  .stview { position: absolute; left: 12px; top: 12px; z-index: 5; font: 12px var(--mono); color: var(--green); background: rgba(0,0,0,.5); padding: 6px 10px; border-radius: 99px; }
+  @media (max-width: 700px) { .stview { display: none; } .reactbar:not(.st) { gap: 4px; flex-wrap: nowrap; } .reactbar:not(.st) button { font-size: 17px; padding: 6px 5px; flex: 1; }
+    .stm { width: 64px; bottom: 9vh; } .reactbar.st { top: 38%; right: 6px; } .reactbar.st button { font-size: 18px; padding: 6px 7px; } }
+
+  /* that's you */
+  #youwin { position: fixed; left: 0; right: 0; top: 9vh; z-index: 62; display: none; pointer-events: none; text-align: center; }
+  #youwin.show { display: block !important; }
+  #youwin.show { display: grid; animation: fade .3s; }
+  #youwin .b { font: clamp(48px, 12vw, 130px)/1 var(--display); color: var(--green); text-shadow: 0 0 30px var(--green), 0 0 80px var(--gold), 6px 6px 0 #0b5e33; animation: cdpop .8s ease-out, pulse .4s .8s infinite alternate; }
+  #youwin .s { font: clamp(22px, 5vw, 44px) var(--display); color: var(--gold2); margin-top: 10px; }
   /* ---------- 3D intro ---------- */
   #intro { position: fixed; inset: 0; z-index: 100; background: #07020f; display: none; transition: opacity .9s ease; }
   #intro.show { display: block; }
@@ -544,6 +638,8 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
   <header>
     <div class="logo"><h1>WHEEL OF <em>FEE</em></h1><div class="sub" id="sub">$WHEEL · 50% creator fees · every 5 min</div></div>
     <div class="chips">
+      <span class="chip live" id="viewers" title="People on this page right now"><i class="dotlive"></i><b id="viewN">–</b> watching</span>
+      <button class="chip btn" id="alertBtn" title="Alerts: 1 min before the spin, and when your wallet is on the wheel">🔕 ALERTS</button>
       <button class="chip btn" id="soundBtn" title="Sound on/off">🔇 SOUND</button>
       <button class="chip btn" id="introBtn" title="Replay the intro">🎬 INTRO</button>
     </div>
@@ -566,6 +662,13 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
     <div class="links" id="links"></div>
   </section>
 
+  <section class="statstrip">
+    <div class="sx"><div class="k">TOTAL PAID OUT</div><div class="v" id="sPaid">0 SOL</div></div>
+    <div class="sx"><div class="k">WINNERS</div><div class="v" id="sWinners">0</div></div>
+    <div class="sx"><div class="k">BIGGEST WIN</div><div class="v" id="sBig">–</div></div>
+    <div class="sx"><div class="k">SPINS</div><div class="v" id="sSpins">0</div></div>
+  </section>
+
   <section class="hero">
     <div class="cabinet">
       <div class="sticker" style="--r:-12deg;--b:var(--green);top:-12px;left:-10px">WAGMI</div>
@@ -585,7 +688,8 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
         <canvas id="wheel" width="1000" height="1000"></canvas>
         <div class="hub" id="hub"><div class="t" id="timer">5:00</div><div class="s" id="hubSub">next spin</div></div>
       </div></div>
-      <div class="zoomhint">🔍 tap the wheel to zoom in on every wallet</div>
+      <div class="zoomhint">🔍 tap the wheel to zoom in · drag it for a practice spin</div>
+      <div class="reactbar" id="reactbar"></div>
       <div class="last" id="last">
         <div><div class="lbl">Last winner</div><div class="who" id="lastWho">–</div></div>
         <div class="amt" id="lastAmt"></div>
@@ -603,6 +707,13 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
         <div class="row"><span>NEXT SPIN</span><b id="nextIn">5:00</b></div>
         <div class="bar"><i id="bar"></i></div>
         <div class="row"><span id="nextAt">–</span><span>no claiming needed</span></div>
+        <div class="mega" id="megaBadge"></div>
+      </div>
+      <div class="card vote">
+        <h2>🗳 VOTE: HOW MANY WINNERS? <small id="voteTotal"></small></h2>
+        <div class="vopts" id="voteOpts"></div>
+        <div class="vnote" id="voteNote">No votes = 1 winner. The pot is split equally between the winners.</div>
+        <div class="vhist" id="voteHist"></div>
       </div>
       <div class="stats">
         <div class="stat g"><div class="k">On wheel</div><div class="v" id="eligCount">–</div></div>
@@ -620,6 +731,21 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
     </div>
   </section>
 
+  <section class="games">
+    <div class="card predict">
+      <h2>🔮 CALL IT: WHICH BAG SIZE WINS NEXT? <small>free · +100 pts</small></h2>
+      <div class="popts" id="predOpts"></div>
+      <div class="pres" id="predRes"></div>
+      <h3>TOP ORACLES</h3>
+      <div class="lb" id="oracles"><div class="m">No calls yet. Be the first oracle.</div></div>
+    </div>
+    <div class="card boards">
+      <h2>🏆 LEADERBOARDS</h2>
+      <div class="tabs" id="lbTabs"><button data-t="sol" class="on">BIGGEST WINNERS</button><button data-t="wins">MOST WINS</button><button data-t="hold">💎 DIAMOND HANDS</button></div>
+      <div class="lb" id="lbList"></div>
+    </div>
+  </section>
+
   <section class="card chartcard">
     <h2>📈 LIVE CHART <small id="chartSrc">via DexScreener</small></h2>
     <div class="chartwrap" id="chartWrap"><div class="chart-empty" id="chartEmpty">Loading chart…</div></div>
@@ -630,7 +756,7 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
       <h2>THE DEGENS ON THE WHEEL <small id="listCount"></small></h2>
       <div class="table">
         <table>
-          <thead><tr><th>Wallet</th><th class="r">Bag</th><th class="r">Diamond hands</th><th class="r">Odds</th></tr></thead>
+          <thead><tr><th>Wallet</th><th class="r">Bag</th><th class="r">Diamond hands</th><th class="r">Boost</th><th class="r">Odds</th></tr></thead>
           <tbody id="rows"></tbody>
         </table>
         <div class="empty" id="empty" style="display:none">Nobody on the wheel yet. Be the first degen. 🎰</div>
@@ -639,8 +765,8 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
     <div class="side">
       <div id="chatDock"></div>
       <div class="card check">
-        <h2>AM I ON THE WHEEL, SER?</h2>
-        <input id="myWallet" placeholder="Paste your wallet address" autocomplete="off" spellcheck="false">
+        <h2>🎯 MY WALLET</h2>
+        <div class="mwrow"><input id="myWallet" placeholder="Paste your wallet address" autocomplete="off" spellcheck="false"><button class="phantom" id="phantomBtn">CONNECT</button></div>
         <div class="check-out" id="checkOut"></div>
       </div>
       <div class="card">
@@ -659,6 +785,7 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
     <div class="w2" id="winSub">the wheel has spoken</div>
     <div class="w3" id="winWho">–</div>
     <div class="w4" id="winAmt">+0 SOL</div>
+    <div class="sharebar"><button class="shx" data-share="x">𝕏 SHARE</button><button class="shx" data-share="dl">⬇ SAVE CARD</button></div>
     <button class="x" id="winClose">LFG 🚀</button>
   </div>
 </div>
@@ -668,8 +795,11 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
   <svg id="zptr" viewBox="0 0 100 130" aria-hidden="true"><path d="M50 128 L12 40 A40 40 0 1 1 88 40 Z" fill="url(#pg)" stroke="#5a3a00" stroke-width="3"/><circle cx="50" cy="32" r="17" fill="url(#gem)" stroke="#5a3a00" stroke-width="3"/></svg>
   <div class="stage-top"><div class="a" id="stA">SPINNING</div><div class="b" id="stB">–</div></div>
   <div class="stage-now" id="stNow" style="display:none"></div>
-  <div class="stage-win" id="stWin"><div class="w1">🏆 WINNER 🏆</div><div class="w3" id="stWho">–</div><div class="w4" id="stAmt">–</div><div class="w2" id="stSub">–</div></div>
+  <div class="stage-win" id="stWin"><div class="w1">🏆 WINNER 🏆</div><div class="w3" id="stWho">–</div><div class="w4" id="stAmt">–</div><div class="w2" id="stSub">–</div><div class="sharebar"><button class="shx" data-share="x">𝕏 SHARE</button><button class="shx" data-share="dl">⬇ SAVE CARD</button></div></div>
   <button class="stage-x" id="stageX" aria-label="Close">✕</button>
+  <img class="stm l" data-m="dog" alt=""><img class="stm r" data-m="frog" alt="">
+  <div class="reactbar st" id="reactbar2"></div>
+  <div class="stview" id="stView"></div>
 </div>
 
 <div id="chat" class="min">
@@ -685,6 +815,9 @@ window.mascotFiles = new Promise((res) => { window.__setMascots = res; });
     <div class="rules">anon · max 200 chars · no links · 1 msg / 4s</div>
   </div>
 </div>
+<div id="cd" aria-hidden="true"><div class="n" id="cdN">10</div><div class="t" id="cdT">GET READY</div><img class="cdm l" data-m="dog" alt=""><img class="cdm r" data-m="frog" alt=""></div>
+<div id="floats" aria-hidden="true"></div>
+<div id="youwin" aria-hidden="true"><div class="b">THAT'S YOU!!!</div><div class="s" id="youAmt"></div></div>
 <canvas id="fx"></canvas>
 
 <div id="intro">
@@ -720,7 +853,7 @@ let state = null, offset = 0;
 const now = () => Date.now() + offset;
 let rot = 0, mode = "idle", anim = null;   // idle | waiting | landing | showing
 let wheelEntries = [];
-let awaitingRound = null, showUntil = 0, lastShownRound = null;
+let awaitingRound = null, showUntil = 0, lastShownRound = null, flickVel = 0;
 let spinStart = 0, stageOpen = false, stageAuto = false, stageTimer = 0;
 const hasWinner = (r) => r && ["paid", "dry-run", "paying"].includes(r.status);
 const MAX_SPIN_MS = 10_000;
@@ -750,7 +883,8 @@ async function load() {
   } catch (e) { console.warn(e); }
 }
 
-function weightOf(h) { return state.config.weighting === "balance" ? Math.max(1, Math.floor(h.balance)) : 1; }
+function boostOf(h) { const c = state?.config || {}; return Math.min(c.boostMax ?? 1, 1 + (c.boostPerHour ?? 0) * Math.max(0, now() - h.since) / 3_600_000); }
+function weightOf(h) { const b = state.config.weighting === "balance" ? Math.max(1, Math.floor(h.balance)) : 1; return Math.max(1, Math.round(b * boostOf(h) * 100)); }
 const byOwner = (list) => [...list].sort((a, b) => (a.owner < b.owner ? -1 : 1));
 // The wheel shows wallets in a shuffled order per round. This is only how they're drawn:
 // the winner is still decided by the blockhash seed on the server.
@@ -775,7 +909,9 @@ function render() {
   setHTML("steps", `
     <div class="step"><div class="n">1</div><p><b>Buy &amp; hold ${fmt(c.minTokens)}+</b> $${esc(c.ticker)}.</p></div>
     <div class="step"><div class="n">2</div><p><b>Hold ${c.minHoldMinutes} minute${c.minHoldMinutes == 1 ? "" : "s"}</b> and your wallet lands on the wheel${c.weighting === "balance" ? " (bigger bag = bigger slice)" : ""}.</p></div>
-    <div class="step"><div class="n">3</div><p><b>Every ${c.roundMinutes} minute${c.roundMinutes == 1 ? "" : "s"}</b> it spins. The winner gets <b>50% of all creator fees</b>, sent automatically.</p></div>`);
+    <div class="step"><div class="n">3</div><p><b>Every ${c.roundMinutes} minute${c.roundMinutes == 1 ? "" : "s"}</b> it spins. The winner gets <b>50% of all creator fees</b>, sent automatically.</p></div>${c.boostMax > 1 ? `
+    <div class="step"><div class="n">💎</div><p><b>Diamond hands:</b> your slice grows +${Math.round(c.boostPerHour * 100)}% per hour you hold, up to ${c.boostMax}× bigger.</p></div>` : ""}
+    <div class="step"><div class="n">🗳</div><p><b>Vote</b> how many winners the next spin has. No votes = 1 winner${c.megaEvery ? `. Every ${c.megaEvery}${({ 1: "st", 2: "nd", 3: "rd" })[c.megaEvery % 100 > 10 && c.megaEvery % 100 < 14 ? 0 : c.megaEvery % 10] || "th"} spin is a <b>MEGA SPIN</b> with at least ${c.megaWinners} winners` : ""}.</p></div>`);
   potTarget = s.potSol ?? 0;
   $("eligCount").textContent = s.eligible.length;
   $("pendCount").textContent = s.pendingCount;
@@ -783,6 +919,7 @@ function render() {
   $("listCount").textContent = `${s.eligible.length} wallet${s.eligible.length === 1 ? "" : "s"}`;
   $("potLink").textContent = short(c.potWallet); $("potLink").href = solscan("account", c.potWallet);
   renderRows(); renderHistory(); renderCheck(); renderTape();
+  if (typeof renderExtras === "function") renderExtras();
   if (displayKey === null) displayKey = s.lastRound?.id ?? Math.round(now() / (c.roundMinutes * 60000));
   if (mode === "idle") setWheel(s.eligible);
   if (mode === "shuffling" && s.lastRound && s.lastRound.id === awaitingRound) pendingRound = s.lastRound;
@@ -828,6 +965,7 @@ function renderRows() {
       <td class="addr"><span class="dot" style="background:${col};color:${col}"></span><a href="${solscan("account", h.owner)}" target="_blank" rel="noopener">${short(h.owner)}</a></td>
       <td class="r">${fmtK(h.balance)}</td>
       <td class="r" data-since="${h.since}">${age(now() - h.since)}</td>
+      <td class="r">×${boostOf(h).toFixed(2)}</td>
       <td class="r">${(weightOf(h) / total * 100).toFixed(1)}%</td></tr>`;
   }).join("");
 }
@@ -944,6 +1082,7 @@ function draw() {
   }
   ctx.fillStyle = edgeGrad; ctx.fillRect(0, 0, W, W);
   ctx.fillStyle = glossGrad; ctx.fillRect(0, 0, W, W);
+  if (typeof hookDraw === "function") hookDraw(ctx, sl, CX, CY, R);
   ctx.restore();
 }
 
@@ -960,7 +1099,7 @@ let last = performance.now();
 const IDLE_W = 0.1, SPIN_W = 9;
 function frame(t) {
   const dt = Math.min(0.05, (t - last) / 1000); last = t;
-  if (mode === "idle") rot += IDLE_W * dt;              // after a spin the wheel stays on the winner
+  if (mode === "idle") { rot += (IDLE_W + flickVel) * dt; flickVel *= Math.pow(0.55, dt); if (Math.abs(flickVel) < 0.02) flickVel = 0; }   // after a spin the wheel stays on the winner
   else if (mode === "waiting") rot += SPIN_W * dt;
   else if (mode === "shuffling") {
     rot += 0.6 * dt;
@@ -983,11 +1122,12 @@ function frame(t) {
   if (mode === "showing" && now() > showUntil) { mode = "idle"; setWheel(state.eligible); }
   bulbPhase += dt * (mode === "waiting" || mode === "landing" ? 14 : mode === "shuffling" ? 24 : 2.2);
   const idx = underPointer();
-  if (idx !== lastIdx) { if (mode === "waiting" || mode === "landing") { ptr = -22; beep(1400, 0.03, "square", 0.03); } lastIdx = idx; }
+  if (idx !== lastIdx) { if (mode === "waiting" || mode === "landing") { ptr = -22; beep(1400, 0.03, "square", 0.03); if (typeof onTick === "function") onTick(idx); } lastIdx = idx; }
   ptr *= 0.82;
   $("pointer").style.transform = `translateX(-50%) rotate(${ptr.toFixed(2)}deg)`;
   if (stageOpen) $("zptr").style.transform = `translateX(-50%) rotate(${ptr.toFixed(2)}deg)`;
   tickTimer(); tickPot(); draw(); if (stageOpen) drawStage(); stepFx(dt);
+  if (typeof frameHook === "function") frameHook(dt, t);
   requestAnimationFrame(frame);
 }
 
@@ -1012,6 +1152,7 @@ function tickTimer() {
     poll(0);
   }
   document.querySelectorAll("td[data-since]").forEach((td) => td.textContent = age(n - +td.dataset.since));
+  if (typeof timerHook === "function") timerHook(left, roundMs);
 }
 
 async function poll(tries) {
@@ -1058,16 +1199,20 @@ function showResult(r, fresh) {
 
 // ---------- celebration ----------
 function celebrate(r) {
-  chatSys(`🏆 ${short(r.winner)} won ${sol(r.amountSol)}${r.status === "dry-run" ? " (test)" : ""}`);
+  if (typeof onWin === "function") onWin(r);
+  const ws = r.winners?.length ? r.winners : [{ owner: r.winner, amountSol: r.amountSol }];
+  chatSys(ws.length > 1 ? `🏆 ${ws.length} winners share ${sol(r.amountSol)}${r.mega ? " (MEGA SPIN)" : ""}` : `🏆 ${short(r.winner)} won ${sol(r.amountSol)}${r.status === "dry-run" ? " (test)" : ""}`);
+  const whoHTML = ws.length > 1 ? `<div class="wl">${ws.map((w) => `<span class="${w.owner === myWallet() ? "me" : ""}">${short(w.owner)}</span>`).join("")}</div>` : esc(r.winner);
+  const amtTxt = ws.length > 1 ? `+${sol(ws[0].amountSol)} each` : `+${sol(r.amountSol)}`;
   if (stageOpen) {                                      // winner shown big on the close-up stage
-    $("stWho").textContent = r.winner; $("stAmt").textContent = `+${sol(r.amountSol)}`;
+    $("stWho").innerHTML = whoHTML; $("stAmt").textContent = amtTxt;
     $("stSub").textContent = r.status === "dry-run" ? "test round · nothing paid" : "sent straight to the winner's wallet";
     $("stWin").classList.add("show"); burst(); winSound();
-    clearTimeout(stageTimer); if (stageAuto) stageTimer = setTimeout(closeStage, 7000);
+    clearTimeout(stageTimer); if (stageAuto) stageTimer = setTimeout(closeStage, 8000 + ws.length * 600);
     return;
   }
-  $("winWho").textContent = r.winner;
-  $("winAmt").textContent = `+${sol(r.amountSol)}`;
+  $("winWho").innerHTML = whoHTML;
+  $("winAmt").textContent = amtTxt;
   $("winSub").textContent = r.status === "dry-run" ? "test round · nothing paid" : "sent straight to the winner's wallet";
   $("winModal").classList.add("show");
   burst(); winSound();
@@ -1107,21 +1252,38 @@ const demo = (() => {
   const addr = () => Array.from({ length: 44 }, () => B58[Math.floor(Math.random() * 58)]).join("");
   const t0 = Date.now(), RM = FAST ? 30000 : 300000;
   const holders = Array.from({ length: +(QS.get("n") || 16) }, (_, i) => ({ owner: addr(), balance: 250000 + Math.random() * 9e6, since: t0 - (6 + i * 37) * 60_000 }));
-  const rounds = {}; let pot = 0.42; const hist = [];
-  const N = +(QS.get("n") || 16);
-  const cfg = { ticker: "FEE", mint: addr(), potWallet: addr(), minTokens: 250000, minHoldMinutes: 5, roundMinutes: RM / 60000, weighting: "equal", minPotSol: 0.01 };
+  if (QS.get("me") === "1") $("myWallet").value = holders[3].owner;           // demo: pretend to be holder #4
+  const rounds = {}; let pot = 0.42; const hist = [], vh = [];
+  const stats = { totalPaidSol: 3.21, totalWinners: 17, rounds: 12, biggest: { owner: holders[1].owner, sol: 0.88, round: 1 }, wallets: {} };
+  const cfg = { ticker: "FEE", mint: addr(), potWallet: addr(), minTokens: 250000, minHoldMinutes: 5, roundMinutes: RM / 60000, weighting: "equal", minPotSol: 0.01,
+    voteOptions: [1, 3, 5, 10], megaEvery: 3, megaWinners: 3, boostPerHour: 0.1, boostMax: 2 };
   cfg.links = { pumpfun: "https://pump.fun/coin/" + cfg.mint, x: "https://x.com/", telegram: "", dexscreener: "https://dexscreener.com/solana/" + cfg.mint };
+  const oracles = [["moonboy", 700, 7, 9], ["ser_sol", 500, 5, 8], ["wagmi99", 300, 3, 6]].map(([name, pts, hits, calls], i) => ({ who: "d" + i, name, pts, hits, calls }));
   return {
     state() {
       const n = Date.now(), id = Math.round(n / RM);
       pot += 0.002;
       if (n - id * RM > 3000 && n - id * RM < RM / 5 && !rounds[id]) {
-        const entries = [...holders].sort((a, b) => a.owner < b.owner ? -1 : 1).map((h) => ({ ...h, weight: 1 }));
-        const wi = Math.floor(Math.random() * entries.length);
-        rounds[id] = { id, at: id * RM, status: "paid", winner: entries[wi].owner, winnerIndex: wi, amountSol: pot, entries, payoutSig: addr() + addr() };
-        hist.unshift(rounds[id]); pot = 0.01;
+        const mega = id % cfg.megaEvery === 0, lead = typeof leadingVote === "function" ? leadingVote() : 1;
+        const k = Math.min(holders.length, Math.max(lead, mega ? cfg.megaWinners : 1));
+        const entries = [...holders].sort((a, b) => a.owner < b.owner ? -1 : 1).map((h) => ({ ...h, weight: Math.round(boostOf(h) * 100) }));
+        const idx = [...entries.keys()].sort(() => Math.random() - .5).slice(0, k);
+        const share = pot / k;
+        const winners = idx.map((i) => ({ owner: entries[i].owner, index: i, amountSol: share }));
+        rounds[id] = { id, at: id * RM, status: "paid", winner: winners[0].owner, winnerIndex: idx[0], winners, winnersCount: k, mega, amountSol: pot, shareSol: share, entries, payoutSig: addr() + addr(),
+          winningTiers: ["whale", "fish"].slice(0, 1 + (k > 1)) };
+        hist.unshift(rounds[id]); stats.totalPaidSol += pot; stats.totalWinners += k; stats.rounds++;
+        winners.forEach((w) => { const x = (stats.wallets[w.owner] ??= { wins: 0, sol: 0 }); x.wins++; x.sol += w.amountSol; if (w.amountSol > stats.biggest.sol) stats.biggest = { owner: w.owner, sol: w.amountSol, round: id }; });
+        vh.unshift({ round: id, chosen: lead, total: live?.vote?.total || 0, mega, winners: k });
+        if (typeof demoLive === "object") demoLive.votes = {};
+        pot = 0.01;
       }
-      return { serverNow: n, config: cfg, eligible: [...holders].sort((a, b) => b.balance - a.balance), pendingCount: 3, holderCount: 211, potSol: pot, lastRound: hist[0], history: hist };
+      const list = Object.entries(stats.wallets).map(([owner, v]) => ({ owner, ...v }));
+      const nextId = Math.ceil(n / RM);
+      return { serverNow: n, config: cfg, eligible: [...holders].sort((a, b) => b.balance - a.balance), pendingCount: 3, holderCount: 211, potSol: pot, lastRound: hist[0], history: hist,
+        voteHistory: vh, oracles, lastPredictions: hist[0] ? { round: hist[0].id, winningTiers: hist[0].winningTiers, players: 14, hits: 5 } : null,
+        next: { round: nextId, mega: nextId % cfg.megaEvery === 0, megaIn: (cfg.megaEvery - nextId % cfg.megaEvery) % cfg.megaEvery },
+        stats: { ...stats, topSol: [...list].sort((a, b) => b.sol - a.sol).slice(0, 10), topWins: [...list].sort((a, b) => b.wins - a.wins).slice(0, 10) } };
     },
     round: (id) => rounds[id],
   };
@@ -1131,8 +1293,9 @@ const demo = (() => {
 
 // ---------- mascot images ----------
 document.querySelectorAll("img[data-m]").forEach((im) => { im.src = mascotURL(im.dataset.m); });
-mascotFiles.then((f) => { const l = document.querySelector(".hb-m.l"), r = document.querySelector(".hb-m.r");
-  if (f.left) { l.src = f.left; l.classList.add("custom"); } if (f.right) { r.src = f.right; r.classList.add("custom"); } });
+mascotFiles.then((f) => {
+  if (f.left) document.querySelectorAll(".hb-m.l, .stm.l, .cdm.l").forEach((x) => { x.src = f.left; x.classList.add("custom"); });
+  if (f.right) document.querySelectorAll(".hb-m.r, .stm.r, .cdm.r").forEach((x) => { x.src = f.right; x.classList.add("custom"); }); });
 
 // ---------- live chart (DexScreener embed; needs the pair address, looked up from the CA) ----------
 let chartFor = null, chartTry = 0;
@@ -1174,7 +1337,7 @@ function closeStage() {
   stageOpen = false; clearTimeout(stageTimer);
   $("stage").classList.remove("show"); $("stWin").classList.remove("show"); document.body.classList.remove("stage-open");
 }
-$("wheelBox").addEventListener("click", () => openStage(false));
+$("wheelBox").addEventListener("click", () => { if (!window.justFlicked) openStage(false); });
 $("stageX").addEventListener("click", closeStage);
 addEventListener("keydown", (e) => { if (e.key === "Escape" && stageOpen) closeStage(); });
 addEventListener("resize", () => { if (stageOpen) sizeStage(); });
@@ -1244,6 +1407,7 @@ function drawStage() {
     c.beginPath(); c.moveTo(cx, cy); c.arc(cx, cy, R, a0, a1); c.closePath();
     c.fillStyle = "rgba(255,255,255,.28)"; c.fill(); c.lineWidth = 3; c.strokeStyle = "#fff"; c.shadowColor = "#fff"; c.shadowBlur = 16; c.stroke(); c.shadowBlur = 0;
   }
+  if (typeof hookDraw === "function") hookDraw(c, sl, cx, cy, R, lim);
   c.restore();
   // hub when the whole wheel is visible
   if (!zoomed) {
@@ -1261,6 +1425,308 @@ function drawStage() {
   if (ptrSlice && N > 1 && !$("stWin").classList.contains("show")) { now_.style.display = "block"; now_.textContent = "▲ " + short(ptrSlice.s.owner) + " ▲"; }
   else now_.style.display = "none";
 }
+
+
+// =====================================================================
+//  v5 extras: my wallet, alerts, live viewers + emotes, vote, predictions,
+//  leaderboards, totals, share card, spin drama, practice spin
+// =====================================================================
+const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+function vib(p) { try { if (navigator.userActivation?.hasBeenActive && navigator.vibrate) navigator.vibrate(p); } catch {} }
+function myWallet() { return ($("myWallet")?.value || "").trim(); }
+const cid = LS.get("wof_cid", null) || (() => { const x = Math.random().toString(36).slice(2, 10); LS.set("wof_cid", x); return x; })();
+const TIER = { whale: ["🐋", "WHALE", "top 25% bags"], dolphin: ["🐬", "DOLPHIN", "next 25%"], fish: ["🐟", "FISH", "next 25%"], shrimp: ["🦐", "SHRIMP", "smallest 25%"] };
+const EMOTES = ["🚀", "🔥", "💀", "🐸", "💎", "😭", "🤑", "🎰"];
+let live = null;
+
+// ---------- my wallet ----------
+if (LS.get("wof_wallet", "")) $("myWallet").value = LS.get("wof_wallet", "");
+$("myWallet").addEventListener("input", () => LS.set("wof_wallet", myWallet()));
+$("phantomBtn").addEventListener("click", async () => {
+  const p = window.phantom?.solana || (window.solana?.isPhantom ? window.solana : null);
+  if (!p) { location.href = `https://phantom.app/ul/browse/${encodeURIComponent(location.href)}?ref=${encodeURIComponent(location.origin)}`; return; }
+  try { const r = await p.connect(); $("myWallet").value = r.publicKey.toString(); LS.set("wof_wallet", myWallet()); renderRows(); renderCheck(); renderExtras(); }
+  catch {}
+});
+function myStatus() {
+  const w = myWallet(); if (!w || !state?.eligible) return null;
+  const h = state.eligible.find((x) => x.owner === w);
+  if (!h) return { on: false };
+  const total = state.eligible.reduce((a, x) => a + weightOf(x), 0);
+  return { on: true, odds: weightOf(h) / total, boost: boostOf(h), bag: h.balance, since: h.since };
+}
+function renderMine() {
+  const st = myStatus(), out = $("checkOut");
+  if (!st) { out.innerHTML = myWallet() ? "" : "Paste your wallet (or connect) to track your slice, odds and alerts."; return; }
+  if (!st.on) { out.innerHTML = `Not on the wheel yet. Hold ${fmt(state.config.minTokens)}+ $${esc(state.config.ticker)} for ${state.config.minHoldMinutes} min.`; return; }
+  const n = state.next?.mega ? Math.max(state.config.megaWinners, leadingVote()) : leadingVote();
+  const chance = 1 - Math.pow(1 - st.odds, Math.min(n, state.eligible.length));
+  out.innerHTML = `<b>You're on the wheel, ser. 🎰</b> Your slice glows gold.
+    <div class="mine-stat"><div><b>${(chance * 100).toFixed(1)}%</b>win chance</div><div><b>×${st.boost.toFixed(2)}</b>diamond boost</div><div><b>${fmtK(st.bag)}</b>bag</div></div>`;
+}
+
+// ---------- alerts (notifications + sound) ----------
+let alertsOn = LS.get("wof_alerts", false), alerted = {}, wasOn = null;
+const setAlertBtn = () => { $("alertBtn").textContent = alertsOn ? "🔔 ALERTS" : "🔕 ALERTS"; $("alertBtn").classList.toggle("on", alertsOn); };
+setAlertBtn();
+$("alertBtn").addEventListener("click", async () => {
+  alertsOn = !alertsOn;
+  if (alertsOn && "Notification" in window && Notification.permission === "default") { try { await Notification.requestPermission(); } catch {} }
+  LS.set("wof_alerts", alertsOn); setAlertBtn(); if (alertsOn) { soundOn = true; $("soundBtn").textContent = "🔊 SOUND"; beep(880, .1); }
+});
+function notify(title, body) {
+  if (!alertsOn) return;
+  beep(660, .15, "triangle", .08); setTimeout(() => beep(990, .2, "triangle", .08), 160);
+  try { if ("Notification" in window && Notification.permission === "granted" && document.hidden) new Notification(title, { body, tag: "wof" }); } catch {}
+  vib([80, 60, 80]);
+}
+
+// ---------- slice highlights drawn on both wheels ----------
+let winSet = null, winRevealT = 0;
+function hookDraw(c, sl, cx, cy, R, lim) {
+  const mine = myWallet();
+  const pop = (s, col, off, label, glow) => {
+    const a0 = rot + s.start - Math.PI / 2, a1 = rot + s.end - Math.PI / 2, mid = (a0 + a1) / 2;
+    c.save(); c.translate(Math.cos(mid) * off, Math.sin(mid) * off);
+    c.beginPath(); c.moveTo(cx, cy); c.arc(cx, cy, R, a0, a1); c.closePath();
+    c.shadowColor = glow; c.shadowBlur = 28; c.lineWidth = Math.max(4, R / 70); c.strokeStyle = col; c.stroke();
+    c.fillStyle = "rgba(255,255,255,.12)"; c.fill(); c.shadowBlur = 0;
+    if (label && (s.end - s.start) * R > 14) { c.translate(cx, cy); c.rotate(mid); c.font = `${Math.max(14, R / 22)}px Bungee, Impact, sans-serif`; c.textAlign = "center"; c.textBaseline = "middle";
+      c.fillStyle = col; c.strokeStyle = "#12041f"; c.lineWidth = 5; c.strokeText(label, R * 0.62, 0); c.fillText(label, R * 0.62, 0); }
+    c.restore();
+  };
+  for (const s of sl) {
+    if (mine && s.owner === mine) pop(s, "#ffcc33", 0, "YOU", "#ffcc33");
+  }
+  if (winSet && mode === "showing") {                    // winners pop out of the wheel, one after another
+    const shown = Math.floor((performance.now() - winRevealT) / 550) + 1, t = (performance.now() - winRevealT) / 1000;
+    winSet.slice(0, shown).forEach((o, k) => { const s = sl.find((x) => x.owner === o); if (s) pop(s, "#39ff88", (lim ? 26 : 14) * (0.6 + 0.4 * Math.abs(Math.sin(t * 4 + k))), winSet.length > 1 ? "#" + (k + 1) : "WIN", "#39ff88"); });
+  }
+}
+function onTick(idx) { if (wheelEntries[idx]?.owner && wheelEntries[idx].owner === myWallet()) { vib(35); beep(1800, .05, "square", .05); } }
+
+// ---------- wins: multi-winner reveal, "that's you", share ----------
+let lastWin = null;
+function onWin(r) {
+  lastWin = r; winSet = (r.winners?.length ? r.winners : [{ owner: r.winner }]).map((w) => w.owner); winRevealT = performance.now();
+  const me = (r.winners || [{ owner: r.winner, amountSol: r.amountSol }]).find((w) => w.owner === myWallet());
+  if (me) { $("youAmt").textContent = `+${sol(me.amountSol ?? r.amountSol)}`; $("youwin").classList.add("show"); setTimeout(() => $("youwin").classList.remove("show"), 6000); burst(); setTimeout(burst, 600); vib([200, 100, 200, 100, 400]); }
+  window.celebrateUntil = performance.now() + 20000;
+  fountain();
+}
+function fountain() {                                    // coins shoot up from the bottom towards the winner banner
+  for (let i = 0; i < 120; i++) parts.push({ x: fx.width / 2 + (Math.random() - .5) * fx.width * .3, y: fx.height + 10, vx: (Math.random() - .5) * 6 * devicePixelRatio,
+    vy: -(14 + Math.random() * 12) * devicePixelRatio, r: Math.random() * TAU, vr: (Math.random() - .5) * .4, s: (6 + Math.random() * 6) * devicePixelRatio, c: "#ffcc33", coin: true, life: 1.4 });
+}
+document.addEventListener("click", (e) => { const b = e.target.closest("[data-share]"); if (b) share(b.dataset.share); });
+async function shareCard(r) {
+  const c = document.createElement("canvas"); c.width = 1200; c.height = 630; const g = c.getContext("2d");
+  const bg = g.createLinearGradient(0, 0, 1200, 630); bg.addColorStop(0, "#2a0a40"); bg.addColorStop(1, "#090312"); g.fillStyle = bg; g.fillRect(0, 0, 1200, 630);
+  const sp = g.createRadialGradient(600, 300, 20, 600, 300, 520); sp.addColorStop(0, "rgba(255,204,51,.28)"); sp.addColorStop(1, "rgba(255,204,51,0)"); g.fillStyle = sp; g.fillRect(0, 0, 1200, 630);
+  g.lineWidth = 14; g.strokeStyle = "#ffcc33"; g.strokeRect(14, 14, 1172, 602);
+  for (let x = 40; x < 1170; x += 44) { g.fillStyle = (x / 44) % 2 ? "#fff6c8" : "#ff2bd6"; g.beginPath(); g.arc(x, 34, 6, 0, 7); g.fill(); g.beginPath(); g.arc(x, 596, 6, 0, 7); g.fill(); }
+  const img = (src) => new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
+  const [dog, frog] = await Promise.all([img(document.querySelector(".hb-m.l")?.src || mascotURL("dog")), img(document.querySelector(".hb-m.r")?.src || mascotURL("frog"))]);
+  if (dog) g.drawImage(dog, 34, 404, 166, 180); if (frog) g.drawImage(frog, 1000, 404, 166, 180);
+  const ws = r.winners?.length ? r.winners : [{ owner: r.winner, amountSol: r.amountSol }];
+  const me = ws.find((w) => w.owner === myWallet());
+  g.textAlign = "center"; g.fillStyle = "#39ff88"; g.font = "bold 34px Impact, Arial Black, sans-serif"; g.fillText(`$${state.config.ticker} · WHEEL OF FEE${r.mega ? " · MEGA SPIN" : ""}`, 600, 110);
+  g.fillStyle = "#fff"; g.font = "bold 64px Impact, Arial Black, sans-serif"; g.fillText(me ? "I JUST WON" : ws.length > 1 ? `${ws.length} DEGENS JUST WON` : "WE HAVE A WINNER", 600, 200);
+  const amt = me ? (me.amountSol ?? r.amountSol) : (ws.length > 1 ? ws[0].amountSol : r.amountSol);
+  const gg = g.createLinearGradient(0, 230, 0, 360); gg.addColorStop(0, "#fff7c2"); gg.addColorStop(.6, "#ffcc33"); gg.addColorStop(1, "#c27b00");
+  g.fillStyle = gg; g.font = "bold 132px Impact, Arial Black, sans-serif"; g.fillText(`+${(amt ?? 0).toFixed(3)} SOL`, 600, 350);
+  g.fillStyle = "#c9b6ff"; g.font = "28px monospace"; g.fillText(ws.length > 1 && !me ? `${ws.length} winners · ${sol(amt)} each` : (me ? me.owner : ws[0].owner).slice(0, 22) + "…", 600, 420);
+  g.fillStyle = "#fff"; g.font = "bold 28px Impact, Arial Black, sans-serif"; g.fillText("HOLD · GET ON THE WHEEL · WIN THE CREATOR FEES", 600, 492);
+  g.fillStyle = "#ffcc33"; g.font = "26px monospace"; g.fillText(location.host, 600, 548);
+  return new Promise((res) => c.toBlob(res, "image/png"));
+}
+async function share(kind) {
+  const r = lastWin || state?.lastRound; if (!r || !state) return;
+  const ws = r.winners?.length ? r.winners : [{ owner: r.winner, amountSol: r.amountSol }];
+  const me = ws.find((w) => w.owner === myWallet());
+  const text = me ? `I just won ${sol(me.amountSol ?? r.amountSol)} on the $${state.config.ticker} Wheel of Fee 🎰 Hold, get on the wheel, win the creator fees.`
+    : `${ws.length > 1 ? ws.length + " degens" : short(ws[0].owner)} just won ${sol(r.amountSol)} on the $${state.config.ticker} Wheel of Fee 🎰`;
+  const blob = await shareCard(r), file = new File([blob], "wheel-of-fee-win.png", { type: "image/png" });
+  if (kind === "x") {
+    if (navigator.canShare?.({ files: [file] })) { try { await navigator.share({ files: [file], text: text + " " + location.origin }); return; } catch {} }
+    window.open(`https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.origin)}`, "_blank", "noopener");
+  } else {
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "wheel-of-fee-win.png"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  }
+}
+
+// ---------- live: viewers, emotes, vote + prediction counts ----------
+const seenReacts = new Set(); let ownPending = [];
+function floatEmote(e, side) {
+  const sp = document.createElement("span"); sp.textContent = e;
+  const base = side ?? (0.15 + Math.random() * 0.7);
+  sp.style.left = (base * 100) + "vw"; sp.style.setProperty("--dx", ((Math.random() - .5) * 120) + "px"); sp.style.setProperty("--rot", ((Math.random() - .5) * 60) + "deg");
+  $("floats").appendChild(sp); setTimeout(() => sp.remove(), 3300);
+}
+[$("reactbar"), $("reactbar2")].forEach((bar) => { bar.innerHTML = EMOTES.map((e) => `<button data-e="${e}">${e}</button>`).join("");
+  bar.addEventListener("click", (ev) => { const b = ev.target.closest("[data-e]"); if (!b) return; sendReact(b.dataset.e); }); });
+let lastReact = 0;
+async function sendReact(e) {
+  if (performance.now() - lastReact < 700) return; lastReact = performance.now();
+  floatEmote(e); ownPending.push({ e, at: Date.now() }); vib(15);
+  if (DEMO) return;
+  try { await fetch("/api/live", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ action: "react", e }) }); } catch {}
+}
+const demoLive = { v: 60 + Math.floor(Math.random() * 60), votes: {}, preds: { whale: 3, dolphin: 5, fish: 2, shrimp: 4 } };
+async function pollLive() {
+  if (document.hidden || !state?.config) return;
+  let r;
+  if (DEMO) {
+    demoLive.v = Math.max(20, demoLive.v + Math.round((Math.random() - .45) * 6));
+    const opts = state.config.voteOptions || [1, 3, 5, 10];
+    opts.forEach((o) => { demoLive.votes[o] = (demoLive.votes[o] || 0) + (Math.random() < .25 ? 1 : 0); });
+    r = { viewers: demoLive.v, reacts: Math.random() < .5 ? [{ t: Date.now(), e: EMOTES[Math.floor(Math.random() * EMOTES.length)] }] : [],
+      vote: { options: opts, counts: { ...demoLive.votes }, total: Object.values(demoLive.votes).reduce((a, b) => a + b, 0), round: Math.ceil(now() / (state.config.roundMinutes * 60000)) },
+      pred: { counts: demoLive.preds } };
+  } else {
+    try { r = await (await fetch("/api/live")).json(); } catch { return; }
+    if (r.error) return;
+  }
+  live = r;
+  $("viewN").textContent = r.viewers ?? "–";
+  for (const x of r.reacts || []) {
+    const k = x.t + x.e; if (seenReacts.has(k)) continue; seenReacts.add(k);
+    const own = ownPending.findIndex((o) => o.e === x.e && Math.abs(o.at - x.t) < 4000);
+    if (own >= 0) { ownPending.splice(own, 1); continue; }
+    setTimeout(() => floatEmote(x.e), Math.random() * 1500);
+  }
+  ownPending = ownPending.filter((o) => Date.now() - o.at < 8000);
+  renderVote(); renderPred();
+}
+async function heartbeat() { if (DEMO || document.hidden) return; try { await fetch("/api/live", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ action: "hb", cid }) }); } catch {} }
+setInterval(pollLive, 3000); setTimeout(pollLive, 800);
+heartbeat(); setInterval(heartbeat, 60000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) { heartbeat(); pollLive(); } });
+
+// ---------- vote ----------
+function leadingVote() {
+  const v = live?.vote; if (!v || !v.total) return 1;
+  return v.options.reduce((best, o) => ((v.counts[o] || 0) > (v.counts[best] || 0) ? o : best), v.options[0]);
+}
+function renderVote() {
+  const v = live?.vote, c = state?.config; if (!v || !c) return;
+  const mine = LS.get("wof_vote_" + v.round, null), lead = leadingVote(), max = Math.max(1, ...Object.values(v.counts));
+  setHTML("voteOpts", v.options.map((o) => `<button class="vbtn ${mine === o ? "mine" : ""} ${v.total && o === lead ? "lead" : ""}" data-o="${o}">
+    <div class="bar" style="width:${((v.counts[o] || 0) / max * 100).toFixed(0)}%"></div>
+    <div class="n">${o}</div><div class="l">WINNER${o > 1 ? "S" : ""}</div><div class="c">${v.counts[o] || 0} vote${(v.counts[o] || 0) === 1 ? "" : "s"}</div></button>`).join(""));
+  $("voteTotal").textContent = `${v.total} vote${v.total === 1 ? "" : "s"} this round`;
+  const mega = state.next?.mega;
+  $("voteNote").innerHTML = v.total ? `Leading: <b>${lead} winner${lead > 1 ? "s" : ""}</b>${mega ? ` · MEGA SPIN: at least ${c.megaWinners}` : ""}. Votes reset after every spin.` : `No votes yet → <b>${mega ? c.megaWinners + " winners (MEGA)" : "1 winner"}</b>. The pot is split equally between the winners.`;
+  setHTML("voteHist", (state.voteHistory || []).slice(0, 8).map((h) => `<span>#${String(h.round).slice(-4)} → <b>${h.winners || h.chosen}</b>${h.mega ? " 💥" : ""} · ${h.total} vote${h.total === 1 ? "" : "s"}</span>`).join(""));
+}
+$("voteOpts").addEventListener("click", async (e) => {
+  const b = e.target.closest("[data-o]"); if (!b || !live?.vote) return;
+  const o = +b.dataset.o, round = live.vote.round, prev = LS.get("wof_vote_" + round, null);
+  if (prev === o) return;
+  LS.set("wof_vote_" + round, o);
+  live.vote.counts[o] = (live.vote.counts[o] || 0) + 1; if (prev != null) live.vote.counts[prev] = Math.max(0, (live.vote.counts[prev] || 0) - 1); else live.vote.total++;
+  renderVote(); beep(700, .06);
+  if (DEMO) { demoLive.votes[o] = (demoLive.votes[o] || 0) + 1; return; }
+  try { await fetch("/api/live", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ action: "vote", o }) }); } catch {}
+});
+
+// ---------- predictions ----------
+function renderPred() {
+  const p = live?.pred; if (!p) return;
+  const round = live.vote?.round, mine = LS.get("wof_pred_" + round, null);
+  setHTML("predOpts", Object.entries(TIER).map(([k, [e, n, d]]) => `<button class="pbtn ${mine === k ? "mine" : ""}" data-c="${k}"><div class="e">${e}</div><div class="n">${n}</div><div class="d">${d}</div><div class="c">${p.counts?.[k] || 0} calls</div></button>`).join(""));
+  const lp = state?.lastPredictions;
+  if (lp?.winningTiers) {
+    const myLast = LS.get("wof_pred_" + lp.round, null), hit = myLast && lp.winningTiers.includes(myLast);
+    $("predRes").innerHTML = `Last spin winners came from: ${lp.winningTiers.map((t) => TIER[t]?.[0] || t).join(" ")} · ${lp.hits}/${lp.players} oracles called it${myLast ? (hit ? " · <b>you called it! +100</b>" : " · you missed this one") : ""}`;
+  } else $("predRes").textContent = mine ? `Locked in ${TIER[mine][0]}. Results after the spin.` : "Pick a group before the spin. You score if a winner comes from your group.";
+}
+$("predOpts").addEventListener("click", async (e) => {
+  const b = e.target.closest("[data-c]"); if (!b || !live?.vote) return;
+  const c = b.dataset.c, round = live.vote.round, prev = LS.get("wof_pred_" + round, null); if (prev === c) return;
+  LS.set("wof_pred_" + round, c); live.pred.counts[c] = (live.pred.counts[c] || 0) + 1; if (prev) live.pred.counts[prev] = Math.max(0, live.pred.counts[prev] - 1);
+  renderPred(); beep(520, .06);
+  if (DEMO) return;
+  try { const r = await (await fetch("/api/live", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ action: "pred", c, name: $("chatName").value.trim() }) })).json(); if (r.who) LS.set("wof_who", r.who); } catch {}
+});
+
+// ---------- totals + leaderboards ----------
+let lbTab = "sol";
+$("lbTabs").addEventListener("click", (e) => { const b = e.target.closest("[data-t]"); if (!b) return; lbTab = b.dataset.t; $("lbTabs").querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b)); renderBoards(); });
+function renderBoards() {
+  const st = state?.stats, me = myWallet();
+  const row = (i, who, val, isMe) => `<div class="r ${isMe ? "me" : ""}"><span class="i">${i + 1}</span><a href="${solscan("account", who)}" target="_blank" rel="noopener">${short(who)}</a><span class="v">${val}</span></div>`;
+  let html = "";
+  if (lbTab === "sol") html = (st?.topSol || []).map((w, i) => row(i, w.owner, sol(w.sol), w.owner === me)).join("");
+  else if (lbTab === "wins") html = (st?.topWins || []).map((w, i) => row(i, w.owner, `${w.wins} win${w.wins > 1 ? "s" : ""}`, w.owner === me)).join("");
+  else html = [...(state?.eligible || [])].sort((a, b) => a.since - b.since).slice(0, 10).map((h, i) => row(i, h.owner, `${age(now() - h.since)} · ×${boostOf(h).toFixed(2)}`, h.owner === me)).join("");
+  setHTML("lbList", html || `<div class="m">${lbTab === "hold" ? "Nobody on the wheel yet." : "No winners yet. First spin makes history."}</div>`);
+  const myWho = LS.get("wof_who", null);
+  setHTML("oracles", (state?.oracles || []).length ? state.oracles.map((o, i) => `<div class="r ${o.who === myWho ? "me" : ""}"><span class="i">${i + 1}</span><span>${esc(o.name)}</span><span class="v">${o.pts} pts · ${o.hits}/${o.calls}</span></div>`).join("") : `<div class="m">No calls yet. Be the first oracle.</div>`);
+}
+function renderStats() {
+  const st = state?.stats;
+  $("sPaid").textContent = `${(st?.totalPaidSol || 0).toFixed(st?.totalPaidSol >= 10 ? 1 : 3)} SOL`;
+  $("sWinners").textContent = fmt(st?.totalWinners || 0);
+  $("sBig").textContent = st?.biggest ? `${st.biggest.sol.toFixed(3)} SOL` : "–";
+  $("sSpins").textContent = fmt(st?.rounds || 0);
+  const nx = state?.next, c = state?.config, mb = $("megaBadge");
+  if (nx?.mega) { mb.className = "mega on"; mb.textContent = `💥 NEXT SPIN IS A MEGA SPIN · ${Math.max(c.megaWinners, leadingVote())}+ WINNERS`; }
+  else if (c?.megaEvery && nx) { mb.className = "mega"; mb.textContent = `💥 Mega spin in ${nx.megaIn} spin${nx.megaIn === 1 ? "" : "s"} (${c.megaWinners}+ winners)`; }
+  else mb.textContent = "";
+}
+function renderExtras() {
+  renderMine(); renderStats(); renderBoards(); renderVote(); renderPred();
+  const st = myStatus();                                 // alert when your wallet lands on the wheel
+  if (st && wasOn === false && st.on) notify("You're on the wheel! 🎰", `Your wallet made it onto the $${state.config.ticker} Wheel of Fee.`);
+  if (st) wasOn = st.on;
+}
+
+// ---------- spin drama: countdown, camera push-in, mascot moods ----------
+let cdLast = -1;
+function timerHook(left, roundMs) {
+  const sec = Math.ceil(left / 1000), cd = $("cd");
+  const showCd = mode === "idle" && left <= 10_000 && left > 300 && !document.hidden;
+  if (showCd) {
+    cd.classList.add("show");
+    if (sec !== cdLast) { cdLast = sec; const n = $("cdN"); n.textContent = sec; n.style.animation = "none"; void n.offsetWidth; n.style.animation = "";
+      $("cdT").textContent = sec > 3 ? (state?.next?.mega ? "💥 MEGA SPIN" : "GET READY") : "HERE WE GO"; beep(sec > 3 ? 180 : 320, .12, "square", .05); vib(20); }
+  } else if (cd.classList.contains("show")) { cd.classList.remove("show"); cdLast = -1; }
+  const round = Math.ceil(now() / roundMs);
+  if (left <= 60_000 && left > 50_000 && !alerted[round]) { alerted[round] = 1; const st = myStatus(); notify("1 minute to the spin ⏱", st?.on ? `You're on the wheel with a ${(st.odds * 100).toFixed(1)}% slice.` : `Get your bag on the $${state?.config?.ticker} wheel.`); }
+}
+function frameHook(dt, t) {
+  const stg = $("stage");
+  if (stageOpen) {
+    const spinning = mode === "waiting" || mode === "landing" || mode === "shuffling";
+    stg.classList.toggle("nervous", spinning);
+    stg.classList.toggle("party", mode === "showing" && !!winSet && hasWinner(lastWin));
+    stg.classList.toggle("sad", mode === "showing" && !!lastShownRound && !hasWinner(state?.lastRound));
+    // camera push-in during the slow-down
+    let sc = 1;
+    if (mode === "landing" && anim) { const p = Math.min(1, (performance.now() - anim.t0) / anim.dur); sc = 1 + 0.14 * p * p; }
+    else if (mode === "showing") sc = 1.14;
+    $("zoom").style.transform = sc === 1 ? "" : `scale(${sc.toFixed(3)})`;
+    $("stView").textContent = `👀 ${live?.viewers ?? "–"} watching`;
+  }
+}
+
+// ---------- practice spin: drag/flick the wheel between spins ----------
+(() => {
+  const box = $("wheelBox"); let down = null, lastA = 0, lastT = 0, vel = 0;
+  const ang = (e) => { const r = box.getBoundingClientRect(); return Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)); };
+  box.style.touchAction = "pan-y";
+  box.addEventListener("pointerdown", (e) => { if (mode !== "idle") return; down = { x: e.clientX, y: e.clientY, drag: false }; lastA = ang(e); lastT = performance.now(); vel = 0; });
+  box.addEventListener("pointermove", (e) => {
+    if (!down) return;
+    if (!down.drag && Math.hypot(e.clientX - down.x, e.clientY - down.y) > 10) { down.drag = true; box.setPointerCapture?.(e.pointerId); }
+    if (!down.drag || mode !== "idle") return;
+    const a = ang(e); let d = a - lastA; if (d > Math.PI) d -= TAU; if (d < -Math.PI) d += TAU;
+    const tt = performance.now(); rot += d; vel = d / Math.max(0.008, (tt - lastT) / 1000); lastA = a; lastT = tt; flickVel = 0;
+  });
+  const up = () => { if (down?.drag) { flickVel = Math.max(-14, Math.min(14, vel)); window.justFlicked = true; setTimeout(() => window.justFlicked = false, 300); } down = null; };
+  box.addEventListener("pointerup", up); box.addEventListener("pointercancel", up);
+})();
 
 // ---------- anon chat ----------
 const chat = { el: $("chat"), open: false, seen: new Set(), last: 0, unread: 0, sending: false, myIds: new Set() };
@@ -1527,7 +1993,8 @@ function init() {
     for (let i = 0; i < NC; i++) { const c = cd[i]; c.y -= c.v * step; c.r += c.vr * step; if (c.y < -7) { c.y = 9; c.x = (Math.random() - .5) * 18; }
       dummy.position.set(c.x, c.y, c.z); dummy.rotation.set(c.r, c.r * .6, 0); dummy.updateMatrix(); coins.setMatrixAt(i, dummy.matrix); }
     coins.instanceMatrix.needsUpdate = true;
-    mascots.forEach((m) => { const d = m.userData; m.position.set(d.x ?? 0, (d.y ?? -5) + Math.abs(Math.sin(t * 2 + d.delay)) * 0.35, 1.6); m.material.rotation = Math.sin(t * 1.5 + d.delay) * 0.05; });
+    const party = performance.now() < (window.celebrateUntil || 0), sp = party ? 7 : 2, amp = party ? 1.1 : 0.35;
+    mascots.forEach((m) => { const d = m.userData; m.position.set(d.x ?? 0, (d.y ?? -5) + Math.abs(Math.sin(t * sp + d.delay)) * amp, 1.6); m.material.rotation = Math.sin(t * (party ? 6 : 1.5) + d.delay) * (party ? 0.18 : 0.05); });
     camera.position.x += (mx * 2.2 - camera.position.x) * 0.06;
     camera.position.y += (0.6 - my * 1.4 - camera.position.y) * 0.06;
     camera.lookAt(target);
