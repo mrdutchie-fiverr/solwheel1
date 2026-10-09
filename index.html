@@ -711,6 +711,7 @@
   .ph-cam.show { display: flex; }
   .ph-cam button { padding: 9px 12px; border-radius: 12px; font: 12px var(--display); color: var(--ink); background: rgba(9,3,18,.85); border: 1px solid var(--hot); }
   body.pit-cam .ph-tc, body.pit-cam .ph-hint { opacity: 0; transition: opacity .4s; }
+  body.pit-cam .ph-banner:not(.bad) { display: none; }
   .ph-emo { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); display: grid; gap: 5px; }
   .ph-emo button { width: 38px; height: 38px; border-radius: 12px; font-size: 18px; background: rgba(9,3,18,.7); border: 1px solid rgba(246,239,255,.15); }
   .ph-emo button:active { transform: scale(.9); }
@@ -3323,7 +3324,7 @@ function build() {
   const back = new THREE.Mesh(new THREE.CircleGeometry(WR, 64), new THREE.MeshStandardMaterial({ map: texFrom(backC), metalness: 0.6, roughness: 0.4 }));
   back.rotation.y = PI; back.position.z = -0.141; spinner.add(back);
   const edge = new THREE.Mesh(new THREE.CylinderGeometry(WR, WR, 0.28, 96, 1, true), M.gold); edge.rotation.x = PI / 2; spinner.add(edge);
-  const pegs = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.03, 0.03, 0.18, 8), M.gold, 64); pegs.count = 0; spinner.add(pegs);
+  const pegs = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.03, 0.03, 0.18, 8), M.gold, 72); pegs.count = 0; spinner.add(pegs);
   // static parts: neon rim, gold ring, bulbs, hub
   const rimNeon = new THREE.Mesh(new THREE.TorusGeometry(WR + 0.11, 0.07, 10, 128), new THREE.MeshBasicMaterial({ color: 0xff2bd6, toneMapped: false })); wheel.add(rimNeon);
   const ring2 = new THREE.Mesh(new THREE.TorusGeometry(WR + 0.34, 0.12, 12, 128), M.gold); ring2.castShadow = !LOW; wheel.add(ring2);
@@ -3362,13 +3363,15 @@ function build() {
 
   // wheel layout: real holders in the page's display order. >48 wallets: top 36 by odds + EVERYONE ELSE
   let layout = [], layoutSig = "";
+  // every wallet gets its own slice at its real odds (only past 720 wallets are the smallest grouped)
+  const MAXS = 720;
   function makeLayout(entries) {
     let list = entries.map((e) => ({ owner: e.owner, weight: e.weight }));
-    if (list.length > 48) {
-      const top = new Set([...list].sort((a, b) => b.weight - a.weight).slice(0, 36).map((e) => e.owner));
-      const rest = list.filter((e) => !top.has(e.owner));
-      list = list.filter((e) => top.has(e.owner));
-      list.push({ owner: "__rest", weight: rest.reduce((a, e) => a + e.weight, 0), count: rest.length, members: new Set(rest.map((e) => e.owner)), items: rest });
+    if (list.length > MAXS) {
+      const keep = new Set([...list].sort((a, b) => b.weight - a.weight).slice(0, MAXS - 1).map((e) => e.owner));
+      const rest = list.filter((e) => !keep.has(e.owner));
+      list = list.filter((e) => keep.has(e.owner));
+      list.push({ owner: "__rest", weight: rest.reduce((a, e) => a + e.weight, 0), count: rest.length, members: new Set(rest.map((e) => e.owner)) });
     }
     const total = list.reduce((a, e) => a + e.weight, 0) || 1;
     let a = 0;
@@ -3376,7 +3379,7 @@ function build() {
   }
   const sliceOf = (owner) => layout.find((s) => s.owner === owner) || layout.find((s) => s.members?.has(owner)) || null;
   function paintWheel() {
-    const g = wg, c = WT / 2, Rr = WT / 2 - 6, me = G(() => myWallet(), "");
+    const g = wg, c = WT / 2, Rr = WT / 2 - 6, me = G(() => myWallet(), ""), k2 = WT / 2048;
     g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, WT, WT);
     g.fillStyle = "#12061f"; g.beginPath(); g.arc(c, c, Rr, 0, TAU); g.fill();
     const n = layout.length;
@@ -3384,44 +3387,47 @@ function build() {
       g.fillStyle = "#ffc857"; g.textAlign = "center"; g.textBaseline = "middle"; g.font = `${WT * 0.05}px ${F.d}`; g.fillText("WAITING FOR DEGENS", c, c - WT * 0.2);
       g.font = `${WT * 0.026}px ${F.m}`; g.fillStyle = "#d9c8f5"; g.fillText("hold the coin 5 min to get a slice", c, c + WT * 0.22);
     }
+    // slices: flat colours, the full circle, always
     layout.forEach((s, k) => {
-      let col = s.owner === "__rest" ? "#2b1250" : s.owner === me ? "#fff3b0" : PAL[k % 4];
+      let col = s.owner === "__rest" ? "#5a2a90" : s.owner === me ? "#fff3b0" : PAL[k % 4];
       if (s.owner !== "__rest" && s.owner !== me && k === n - 1 && n % 4 === 1 && n > 1) col = PAL[2];
-      const gr = g.createRadialGradient(c, c, Rr * 0.18, c, c, Rr); gr.addColorStop(0, "#0b0418"); gr.addColorStop(0.45, col); gr.addColorStop(1, col);
-      g.beginPath(); g.moveTo(c, c); g.arc(c, c, Rr, s.a0 - PI / 2, s.a1 - PI / 2); g.closePath(); g.fillStyle = gr; g.fill();
-      if (s.items) {                                       // EVERYONE ELSE: one thin stripe per wallet, at its real odds
-        const tot = s.weight || 1; let a = s.a0;
-        s.items.forEach((e, j) => { const b = a + (e.weight / tot) * (s.a1 - s.a0);
-          const cg = g.createRadialGradient(c, c, Rr * 0.2, c, c, Rr); cg.addColorStop(0, "#0b0418"); cg.addColorStop(0.5, PAL[j % 4] + "88"); cg.addColorStop(1, PAL[j % 4] + "cc");
-          g.beginPath(); g.moveTo(c, c); g.arc(c, c, Rr, a - PI / 2, b - PI / 2); g.closePath(); g.fillStyle = cg; g.fill(); a = b; });
-        g.beginPath(); g.moveTo(c, c); g.arc(c, c, Rr, s.a0 - PI / 2, s.a1 - PI / 2); g.closePath();
-        g.lineWidth = WT * 0.006; g.strokeStyle = "#ffc857"; g.stroke();
-      }
-      if (n > 1) { g.lineWidth = WT * 0.003; g.strokeStyle = "#090312"; g.stroke(); }
-      if (s.owner === me) { g.lineWidth = WT * 0.008; g.strokeStyle = "#ffc857"; g.stroke(); }
+      g.beginPath(); g.moveTo(c, c); g.arc(c, c, Rr, s.a0 - PI / 2, s.a1 - PI / 2 + (n > 1 ? 0.002 : 0)); g.closePath(); g.fillStyle = col; g.fill();
     });
-    g.textBaseline = "middle";
+    // dividers (only while they don't turn the wheel into a black smear)
+    if (n > 1 && n <= 260) {
+      g.strokeStyle = "rgba(9,3,18,.85)"; g.lineWidth = Math.max(1, WT * (n > 120 ? 0.0012 : 0.003));
+      g.beginPath(); for (const s of layout) { const a = s.a0 - PI / 2; g.moveTo(c + Math.cos(a) * Rr * 0.2, c + Math.sin(a) * Rr * 0.2); g.lineTo(c + Math.cos(a) * Rr, c + Math.sin(a) * Rr); } g.stroke();
+    }
+    // depth: one dark gradient from the hub outwards
+    const sh = g.createRadialGradient(c, c, Rr * 0.16, c, c, Rr);
+    sh.addColorStop(0, "rgba(11,4,24,1)"); sh.addColorStop(0.3, "rgba(11,4,24,.55)"); sh.addColorStop(0.55, "rgba(11,4,24,0)"); sh.addColorStop(0.97, "rgba(11,4,24,0)"); sh.addColorStop(1, "rgba(11,4,24,.35)");
+    g.fillStyle = sh; g.beginPath(); g.arc(c, c, Rr, 0, TAU); g.fill();
+    // my slice gets a gold outline
+    for (const s of layout) if (s.owner === me) { g.beginPath(); g.moveTo(c, c); g.arc(c, c, Rr, s.a0 - PI / 2, s.a1 - PI / 2); g.closePath(); g.lineWidth = WT * 0.008; g.strokeStyle = "#ffc857"; g.stroke(); }
+    // wallet labels + identicons wherever there is room for them
+    g.textBaseline = "middle"; g.textAlign = "right";
     for (const s of layout) {
-      const span = s.a1 - s.a0; if (span < 0.03) continue;
-      const mid = (s.a0 + s.a1) / 2, dark = s.owner === "__rest";
+      const span = s.a1 - s.a0, mid = (s.a0 + s.a1) / 2, rest = s.owner === "__rest";
+      const st = Math.min(Rr * 0.11, span * Rr * 0.86 * 0.8), fs = Math.min(WT * 0.03, span * Rr * 0.6 * 0.7);
+      if (fs < 13 * k2 && st < 16 * k2) continue;
       g.save(); g.translate(c, c); g.rotate(mid - PI / 2);
-      const st = Math.min(Rr * 0.11, Math.max(10, span * Rr * 0.82 * 0.8));
-      if (!dark) drawId(g, s.owner, Rr * 0.86 - st / 2, -st / 2, st, "#fff");
-      const label = dark ? `EVERYONE ELSE · ${s.count} WALLETS` : shortA(s.owner);
-      const maxW = Rr * (dark ? 0.6 : 0.52) - (dark ? 0 : st * 0.2);
-      const fs = Math.min(WT * 0.032, Math.max(WT * 0.009, span * Rr * 0.55 * 0.62));
-      g.font = `${fs}px ${dark ? F.d : F.m}`; fitFont(g, label, maxW, fs, dark ? F.d : F.m, 6);
-      g.textAlign = "right"; g.fillStyle = dark ? "#ffc857" : "#0b0418";
-      if (dark) { g.font = `${WT * 0.04}px ${F.d}`; fitFont(g, label, Rr * 0.62, WT * 0.04, F.d); const w = g.measureText(label).width;
-        g.fillStyle = "rgba(9,3,18,.82)"; rr(g, Rr * 0.93 - w - 24, -WT * 0.03, w + 48, WT * 0.06, WT * 0.02); g.fill(); g.fillStyle = "#ffc857"; }
-      if (span > 0.02) g.fillText(label, dark ? Rr * 0.92 : Rr * 0.86 - st * 0.65, 0);
+      if (!rest && st >= 16 * k2) drawId(g, s.owner, Rr * 0.88 - st / 2, -st / 2, st, "#fff");
+      if (fs >= 13 * k2) {
+        const label = rest ? `+${s.count} MORE` : shortA(s.owner), font = rest ? F.d : F.m;
+        fitFont(g, label, Rr * 0.5, fs, font, 6);
+        g.fillStyle = s.owner === me ? "#5a3a00" : rest ? "#fff" : "#0b0418";
+        g.fillText(label, Rr * 0.88 - (st >= 16 * k2 ? st * 0.65 : 0), 0);
+      }
       g.restore();
     }
     g.strokeStyle = "#ffc857"; g.lineWidth = WT * 0.01; g.beginPath(); g.arc(c, c, Rr - WT * 0.005, 0, TAU); g.stroke();
     wTex.needsUpdate = true;
-    // pegs at slice borders
-    const d = new THREE.Object3D(), np = n > 1 ? Math.min(64, n) : 0;
-    for (let i = 0; i < np; i++) { const a = PI / 2 - layout[i].a0; d.position.set(Math.cos(a) * WR * 0.965, Math.sin(a) * WR * 0.965, 0.22); d.rotation.set(PI / 2, 0, 0); d.updateMatrix(); pegs.setMatrixAt(i, d.matrix); }
+    // pegs: one per slice border, or evenly spaced all the way round when there are too many slices
+    const d = new THREE.Object3D(), NP = 72, np = n < 2 ? 0 : Math.min(NP, n);
+    for (let i = 0; i < np; i++) {
+      const a = PI / 2 - (n <= NP ? layout[i].a0 : (i / NP) * TAU);
+      d.position.set(Math.cos(a) * WR * 0.965, Math.sin(a) * WR * 0.965, 0.22); d.rotation.set(PI / 2, 0, 0); d.updateMatrix(); pegs.setMatrixAt(i, d.matrix);
+    }
     pegs.count = np; pegs.instanceMatrix.needsUpdate = true;
   }
   function setLayout(entries, force) {
