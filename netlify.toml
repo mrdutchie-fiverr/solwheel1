@@ -4,9 +4,9 @@
   publish = "."
   functions = "."
 
-# runs every minute (holder snapshot; spins + pays on every 5-minute mark)
+# runs every 5 minutes, on the spin mark (holder snapshot, spin, payout, fee claim). Once per round keeps it inside the free plan.
 [functions."tick"]
-  schedule = "* * * * *"
+  schedule = "*/5 * * * *"
 
 [[redirects]]
   from = "/api/state"

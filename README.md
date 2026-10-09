@@ -75,3 +75,22 @@ The site now opens as a walkable 3D casino ("THE FEE PIT"). The classic page is 
 - All art, including the FEEBOI mascot, and all sound is generated in code: no image files, no outside images.
 - Slow device? It turns bloom off and then drops to a lite mode by itself; FLAT MODE is always one tap away. Settings has a switch for the spin camera.
 - Only `index.html` changed for the 3D mode; no new Netlify settings are needed.
+
+## Multiplayer (see other degens in the 3D pit)
+- First time in the pit, each visitor is asked "SEE OTHER DEGENS?" (can be changed in ⚙️ Settings).
+- Players who join see each other walking around with name tags (their chat nickname), chat bubbles over their heads and emotes. Press **T** (or tap 💬) to say something: it shows over your head for people in your room and also goes into the normal chat. Same rules as the chat: no links, 200 characters, 1 message per 4 seconds.
+- It is peer-to-peer: browsers connect directly to each other (up to 15 per room; when a room is full, people go to the next room). Free public relays are only used to find each other. **It costs no Netlify credits.** People in the same room can see each other's IP address; the join prompt and the terms say so.
+
+## Staying on Netlify's FREE plan (important)
+New free Netlify accounts get **300 credits per month**. When they run out, Netlify pauses the whole site until the next month. This version is built to use as few credits as possible:
+- The spin timer runs **once per 5 minutes** (on the spin mark) instead of every minute. Effective rule: a wallet must be seen at the previous 5-minute mark (so it has held 5 minutes or a bit more).
+- Visitors are served from Netlify's cache; the timer clears that cache the moment something changes, so the page is still instant.
+- Pages poll slowly and stop completely in background tabs. Multiplayer, bubbles and emotes in the pit go peer-to-peer.
+
+Rough budget per month (1 GB functions, Netlify's credit prices):
+- Spin timer: about 60–120 credits (more on rounds with real payouts and fee claims).
+- Visitors: about 0.3–0.45 credits per visitor-hour (one person with the page open for one hour).
+- **Every deploy costs 15 credits.** Upload all changed files to GitHub in ONE go (one commit), not one by one.
+- That leaves room for roughly 350–500 visitor-hours a month (for example 4 people watching 3–4 hours every day).
+
+Check the meter in Netlify → your team → Usage / Billing. If the coin takes off, Netlify Personal ($9, 1,000 credits) or Pro ($20, 3,000 credits) keeps it online; otherwise the site pauses when the 300 credits are gone.
