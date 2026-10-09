@@ -66,3 +66,12 @@ but every open tab sends a small "I'm here" ping once a minute. With hundreds of
 ## Terms screen, music, settings
 - First-time visitors see a "Read me first" screen with the terms and must tick 18+ and "I agree" before entering. It's a basic template, not legal advice: have a lawyer look at it if the project grows. If you change the terms, change `TERMS_KEY` (`wof_terms_v1` → `wof_terms_v2`) in index.html so everyone has to agree again.
 - Arcade music: 4 original chiptune tracks generated in the browser (no music files). Visitors pick a track, volume or turn it off in ⚙️ Settings.
+
+## THE FEE PIT (3D mode)
+The site now opens as a walkable 3D casino ("THE FEE PIT"). The classic page is still there, 100% working, as **FLAT MODE** (button top right; each visitor's choice is remembered). Add `?flat` or `?pit` to a link to force one.
+- Desktop: click to walk (WASD, mouse look, Shift sprint, E use, Esc menu), or just click any booth. Phones: drag to look, tap the floor to walk, tap a booth.
+- Every station uses the real page: vote booths, CALL IT tanks, jackpot vault, degen table + cooling-down ice, chart lounge (DexScreener), chat booth, wallet teller, hall of winners (Solscan), CA plaque (copy + links), stats plinths. Nothing is faked.
+- The 3D wheel uses the real holders. With more than 48 wallets it shows the top 36 by odds plus one EVERYONE ELSE slice (drawn as one stripe per wallet). At zero the camera flies to the wheel and it lands on the real winner (4.5 s).
+- All art, including the FEEBOI mascot, and all sound is generated in code: no image files, no outside images.
+- Slow device? It turns bloom off and then drops to a lite mode by itself; FLAT MODE is always one tap away. Settings has a switch for the spin camera.
+- Only `index.html` changed for the 3D mode; no new Netlify settings are needed.
